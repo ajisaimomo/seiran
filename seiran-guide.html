@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOBE星蘭纏　情報のしくみ　説明書</title>
+<style>
+  :root{
+    --ai:#1B3358; --ai-usu:#EDF1F7;
+    --kurenai:#A6222E; --kincha:#B98A2B;
+    --sumi:#14181F; --hai:#5B6470;
+    --washi:#FBFAF7; --kumo:#E4E2DC; --shiro:#fff;
+    --mincho:"Yu Mincho","YuMincho","Hiragino Mincho ProN",serif;
+    --gothic:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#EFEEEA;color:var(--sumi);font-family:var(--gothic);line-height:1.85;-webkit-text-size-adjust:100%}
+  .page{max-width:660px;margin:0 auto;background:var(--washi);padding:0 0 60px}
+  header{background:var(--ai);color:#fff;padding:26px 26px 20px}
+  header .team{font-family:var(--mincho);font-size:15px;letter-spacing:.18em;margin:0 0 6px;opacity:.85}
+  header h1{font-family:var(--mincho);font-size:25px;font-weight:600;margin:0;letter-spacing:.05em;line-height:1.4}
+  header p{margin:10px 0 0;font-size:13px;opacity:.85}
+  .collar{height:5px;background:var(--kurenai)}
+  .collar-thin{height:2px;background:var(--kincha)}
+  main{padding:24px 26px 0}
+  @media (max-width:560px){ header{padding:20px 16px 16px} main{padding:18px 16px 0} }
+
+  h2{font-family:var(--mincho);font-size:19px;font-weight:600;margin:38px 0 12px;letter-spacing:.04em;
+     padding-bottom:7px;border-bottom:2px solid var(--ai)}
+  h2:first-child{margin-top:0}
+  h3{font-size:14.5px;margin:26px 0 8px}
+  p{font-size:14px;margin:0 0 14px}
+  .lead{font-size:14.5px}
+
+  .kome{border-left:3px solid var(--kincha);background:#FFFCF4;border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;margin:0 0 16px}
+  .todo{border-left:3px solid var(--kurenai);background:#FCF4F4;border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;margin:0 0 16px}
+  .todo b{color:var(--kurenai)}
+
+  .three{display:grid;gap:10px;margin:0 0 18px}
+  @media(min-width:620px){ .three{grid-template-columns:1fr 1fr 1fr} }
+  .place{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:14px;border-top:4px solid var(--kumo)}
+  .place.l{border-top-color:#06C755}
+  .place.s{border-top-color:var(--kincha)}
+  .place.a{border-top-color:var(--ai)}
+  .place h4{margin:0 0 6px;font-size:14.5px}
+  .place p{font-size:12.5px;margin:0;color:var(--hai);line-height:1.75}
+
+  .two{display:grid;gap:10px;margin:0 0 18px}
+  @media(min-width:620px){ .two{grid-template-columns:1fr 1fr} }
+  .url{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:15px}
+  .url h4{margin:0 0 4px;font-size:15px}
+  .url .u{font-size:11.5px;color:#8A8F99;margin:0 0 9px}
+  .url ul{margin:0;padding-left:1.15em;font-size:12.5px;color:var(--hai)}
+  .url li{margin-bottom:4px}
+
+  .notes{display:grid;gap:9px;margin:0 0 16px}
+  @media(min-width:520px){ .notes{grid-template-columns:1fr 1fr} }
+  .note-i{background:var(--shiro);border:1px solid var(--kumo);border-radius:10px;padding:12px 14px}
+  .note-i b{display:block;font-size:14px;margin-bottom:3px}
+  .note-i span{font-size:12.5px;color:var(--hai);line-height:1.7}
+
+  .flow{margin:0 0 18px}
+  .step{display:flex;gap:12px;align-items:flex-start;background:var(--shiro);border:1px solid var(--kumo);border-radius:11px;padding:13px 15px}
+  .step .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--ai);color:#fff;font-size:13px;
+    display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px}
+  .step b{display:block;font-size:14px;margin-bottom:2px}
+  .step span{font-size:12.5px;color:var(--hai);line-height:1.75}
+  .arrow{text-align:center;color:var(--kurenai);font-size:16px;line-height:1;margin:5px 0}
+
+  .pair{border:1px solid var(--kumo);border-radius:12px;overflow:hidden;background:var(--shiro);margin:0 0 16px}
+  .pair .side{padding:13px 16px}
+  .pair .do{background:#F4F7FB;border-bottom:1px solid var(--kumo)}
+  .pair .lbl{font-size:11px;font-weight:700;letter-spacing:.06em;margin:0 0 6px}
+  .pair .do .lbl{color:var(--ai)}
+  .pair .see .lbl{color:var(--kurenai)}
+  .pair p{font-size:13px;margin:0 0 6px;line-height:1.8}
+  .pair p:last-child{margin-bottom:0}
+  .pair ul{margin:4px 0 0;padding-left:1.15em;font-size:12.5px}
+  .pair li{margin-bottom:3px}
+  .scene{font-family:var(--mincho);font-size:16px;margin:26px 0 9px;font-weight:600}
+  .scene em{font-style:normal;color:var(--kurenai);font-size:13px;font-family:var(--gothic);margin-left:8px}
+  @media(min-width:620px){
+    .pair{display:grid;grid-template-columns:1fr 1fr}
+    .pair .do{border-bottom:0;border-right:1px solid var(--kumo)}
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--shiro);
+    border:1px solid var(--kumo);border-radius:10px;overflow:hidden;margin:0 0 16px}
+  th,td{padding:10px 11px;border-bottom:1px solid var(--kumo);text-align:left;vertical-align:top}
+  th{background:var(--ai-usu);font-size:12px;color:var(--ai);font-weight:700}
+  tr:last-child td{border-bottom:0}
+  td.c{white-space:nowrap}
+
+  ul.body{margin:0 0 16px;padding-left:1.2em;font-size:14px}
+  ul.body li{margin-bottom:6px}
+  .chip{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:4px;border:1px solid;margin-right:4px}
+  .c1{color:var(--kurenai);border-color:#E2B8BC;background:#FCF2F3}
+  .c2{color:var(--ai);border-color:#C3CFE2;background:#F1F5FA}
+  .c3{color:#4A505A;border-color:var(--kumo);background:#F4F3EF}
+  .c4{color:#6B5410;border-color:#E3D3A6;background:#FBF6E8}
+
+  footer{margin:40px 26px 0;padding-top:16px;border-top:1px solid var(--kumo);font-size:12px;color:#8A8F99}
+  @media print{
+    body{background:#fff} .page{max-width:none}
+    header{background:#1B3358 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    h2{page-break-after:avoid} .step,table,.pair{page-break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <p class="team">KOBE 星蘭纏</p>
+  <h1>情報のしくみ<br>いま考えていること</h1>
+  <p>デモを触るまえに読んでください</p>
+</header>
+<div class="collar"></div><div class="collar-thin"></div>
+
+<main>
+
+<h2>なぜ何か作ろうとしているのか</h2>
+<p class="lead">いまチームの情報は、ほぼ全部がLINEを流れていきます。練習の日程も、出演の依頼も、集合時間の変更も、写真も動画も雑談も、同じ1本のタイムラインです。</p>
+<p>そうすると、<strong>「次の練習っていつだっけ」を誰かがスクロールして探す</strong>ことになります。見つからないから誰かが聞く。誰かが答える。それもまた流れていく。予定が増えると、誰かが手作業でまとめ直す。</p>
+<p>もっと困るのが、<strong>あとから入ってくる人</strong>です。入る前のLINEは読めないので、決まったことを何も知らないまま合流します。コベカツで中学生が入ってくると、これがそのまま起きます。</p>
+<div class="kome">LINEをやめる話ではありません。写真を喜んだり、お祝いを言ったり、みんなで盛り上がるのはLINEのままがいい。<strong>「あとから探さないといけない情報」だけを、LINEの外に置く</strong>という話です。</div>
+
+<h2>場所を3つに分ける</h2>
+<div class="three">
+  <div class="place l"><h4>LINE</h4><p>おしゃべり、写真、お祝い、相談、急ぎの連絡。いままでどおり。ここは何も変えません。</p></div>
+  <div class="place s"><h4>スクペイ</h4><p>コベカツの中学生の会費支払いと、市からのお知らせ。神戸市の仕組みなので、こちらでは変えられません。</p></div>
+  <div class="place a"><h4>あたらしいサイト</h4><p>予定・出欠・決まったこと・動画。<strong>探さないと分からない情報だけ</strong>を置きます。</p></div>
+</div>
+<div class="kome">スクペイは<strong>クラブから送るだけの一方通行</strong>で、テキスト500文字まで、送ったものは消せません。生徒から「休みます」を送ることもできません。だから、こちらで受け皿を用意する必要があります。<br>保護者側のアドレスは <strong>club-guardian.sukupay.jp</strong> です。Webなので、コベカツサポートのアプリを開かなくても直接飛べます。あたらしいサイトからリンクを貼っておきます。</div>
+
+<h2>URLは2つ。中身も分けます</h2>
+<div class="two">
+  <div class="url">
+    <h4>メンバー用</h4>
+    <p class="u">LINEで配る。だれでも開ける</p>
+    <ul>
+      <li>ホーム（次の予定と出欠）</li>
+      <li>予定（先の日程もぜんぶ）</li>
+      <li>決まったこと</li>
+      <li>動画・写真</li>
+    </ul>
+  </div>
+  <div class="url">
+    <h4>運営用</h4>
+    <p class="u">別のアドレス。運営だけが知っている</p>
+    <ul>
+      <li>ホーム（出欠の集計・やること）</li>
+      <li>予定をつくる／出欠を見る</li>
+      <li>掲示（決まったこと・動画）</li>
+      <li>会費／衣装／名簿／データ</li>
+    </ul>
+  </div>
+</div>
+<p>メンバー用は<strong>だれが開いても同じ画面</strong>です。会費も連絡先も出しません。だから、URLが誰かに転送されても困りません。</p>
+
+<h2>ログインはありません</h2>
+<p>中学生にIDとパスワードを覚えてもらうのは、たぶん最初の1週間で崩れます。忘れる、再発行を頼む、その対応が運営に来る。それで止まります。</p>
+<p>なので、<strong>名前をえらぶだけ</strong>にしました。いま調整さんでやっているのと同じです。</p>
+<div class="flow">
+  <div class="step"><span class="n">1</span><div><b>はじめて開くと、名前の一覧が出る</b><span>自分の名前を押します。押すのはこの1回だけです。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">2</span><div><b>次からは、その端末が名前を覚えている</b><span>開くとすぐ自分の画面。ちがう人が使うときは、ヘッダーの「ちがう人」から選び直せます。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">3</span><div><b>一度答えた出欠は、そのままでは変わらない</b><span>「回答ずみ：参加」と表示され、「変更する」を押さないとボタンが出ません。押し間違いで上書きされません。</span></div></div>
+</div>
+<div class="kome">この方式だと、他人の名前で回答することもできてしまいます。ただ、出欠に出るのは名前と○×だけで、いま調整さんでも同じ状態です。実害が出るとすれば押し間違いのほうなので、そちらを止める作りにしています。<br>名簿や会費を本人に見せる段階になったら、LINEでログインする方式に切り替えます。そのとき、それまでのデータはそのまま使えます。</div>
+
+<h2>中身は「5つの表」</h2>
+<p>むずかしい仕組みではありません。中身はスプレッドシート5枚だと思ってください。</p>
+<div class="notes">
+  <div class="note-i"><b>① メンバー</b><span>だれがメンバーか。氏名、区分、学年、衣装サイズ。</span></div>
+  <div class="note-i"><b>② 予定</b><span>日付、時間、場所、持ち物、回答の締切。</span></div>
+  <div class="note-i"><b>③ 出欠</b><span>だれが、どの予定に、参加か欠席か未定か。</span></div>
+  <div class="note-i"><b>④ 会費</b><span>いくら請求したか。だれが払い終わったか。</span></div>
+  <div class="note-i"><b>⑤ 衣装</b><span>いつ、だれに、何を、どのサイズで貸したか。返ったか。</span></div>
+</div>
+<p>「決まったこと」は表ではなく、上書きしていく1枚のホワイトボードです。増えていく掲示板にすると、またLINEと同じことが起きるので。</p>
+<p>動画と写真も表に入れません。Googleドライブやフォトに置いたまま、<strong>そこへのリンクだけ</strong>を並べます。容量の心配も、アップロードの手間も増やさないためです。</p>
+<div class="kome">デモの運営画面には「データ」というタブがあります。この5つの表がそのまま見られて、CSVでコピーできます。<strong>中身はふつうの表なので、万が一つくった人が抜けても、データは誰でも開けます。</strong></div>
+
+<h2>いちばん大事なこと：1回書けば、全部に出る</h2>
+<div class="flow">
+  <div class="step"><span class="n">1</span><div><b>運営が「11/8（日）14:00〜17:00 生田中」と入力する</b><span>入力するのはここ1か所だけです。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">2</span><div><b>その瞬間、3つのことが同時に起きる</b><span>メンバー全員の予定に出る／その日の出欠受付がはじまる（全員が未回答）／LINEに貼る文面ができる。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">3</span><div><b>メンバーは、参加・欠席・未定を1回押すだけ</b><span>理由は書かせません。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">4</span><div><b>運営の画面で「参加12・欠席3・未定2・未回答4」が見える</b><span>集計しません。押された瞬間に数が変わります。</span></div></div>
+</div>
+
+<h2>実際のながれ</h2>
+<p>だれかが何かをすると、相手側の画面がどう変わるか。5つの場面で追ってみます。</p>
+
+<p class="scene">場面1　入会する<em>入力するのは保護者。運営は入力しません</em></p>
+<div class="pair">
+  <div class="side do">
+    <p class="lbl">保護者のスマホ</p>
+    <p>送られてきたURLを開いて、1回だけ入力します。</p>
+    <ul>
+      <li>生徒の氏名・ふりがな・学年</li>
+      <li>区分（中学生／その他／踊らない保護者）</li>
+      <li>本人の連絡先、保護者の氏名と連絡先</li>
+      <li>緊急連絡先</li>
+      <li>衣装サイズ</li>
+      <li>写真・動画の掲載に同意するか</li>
+    </ul>
+  </div>
+  <div class="side see">
+    <p class="lbl">運営の画面</p>
+    <p>送信された瞬間に、こうなります。</p>
+    <ul>
+      <li>名簿に1人ふえる</li>
+      <li>会費の未入金リストに出る</li>
+      <li>次の予定の未回答リストに出る</li>
+      <li>メンバー用サイトの名前えらびに出る</li>
+    </ul>
+    <p><strong>運営は何も打ち込んでいません。</strong>申込書を見ながら転記する作業がなくなります。</p>
+  </div>
+</div>
+<div class="kome">紙の入会申込書をやめる話ではありません。同意や署名が要るものは紙のまま、日常で使う情報だけをこのフォームで集める、という分け方もできます。</div>
+
+<p class="scene">場面2　練習の予定を決める<em>担当が入れる → 全員に出る</em></p>
+<div class="pair">
+  <div class="side do">
+    <p class="lbl">スケジュール担当の画面</p>
+    <p>1つのフォームに入れて、登録を押すだけ。</p>
+    <ul><li>日付・時間・場所</li><li>持ち物やメモ</li><li>回答の締切</li></ul>
+    <p>登録すると、LINEに貼る文章が自動でできます。コピーしてグループに貼るだけです。</p>
+  </div>
+  <div class="side see">
+    <p class="lbl">メンバーの画面</p>
+    <p>ホームのいちばん上に、その予定が出ます。下に「参加・未定・欠席」の3つのボタン。押して終わりです。</p>
+    <p>「予定」タブを開けば、先の日程もまとめて見られます。LINEを遡らなくて済みます。</p>
+  </div>
+</div>
+
+<p class="scene">場面3　未回答の人に声をかける<em>だれが答えていないか、名前で分かる</em></p>
+<div class="pair">
+  <div class="side do">
+    <p class="lbl">担当の画面</p>
+    <p>「参加12・欠席3・未定2・未回答4」と出て、未回答の4人は名前で並びます。</p>
+    <p><strong>「未回答の名前をコピー」</strong>を押すと、催促の文面ができます。LINEに貼るだけです。</p>
+    <p>電話やLINEで返事をもらったら、その場で担当が代わりに入れられます。スクペイでは休みの連絡を受け取れないので、ここが受け皿になります。</p>
+  </div>
+  <div class="side see">
+    <p class="lbl">メンバーのLINE</p>
+    <p>いつものグループに、いつもの調子で届きます。新しいアプリの通知は増えません。</p>
+    <p>リンクを押せば、その場で回答できます。</p>
+  </div>
+</div>
+<div class="todo"><b>相談したいこと。</b>個別の問い合わせは、どこで受けますか。LINEのまま（すぐ届く）、メール（記録が残る）、サイトの中（ほかを見なくて済むが、みんな見に来ない）。それぞれ一長一短です。</div>
+
+<p class="scene">場面4　衣装を貸す・返してもらう<em>いまの状態だけ表示。履歴は畳んでおく</em></p>
+<div class="pair">
+  <div class="side do">
+    <p class="lbl">衣装担当の画面</p>
+    <p>だれに・品名・<strong>サイズ</strong>・貸出／返却／購入・<strong>日付</strong>を入れて記録します。</p>
+    <p>貸して、返してもらって、次の年にまた貸す。何度くり返しても、<strong>表示は最新の1件だけ</strong>です。行は増えません。「履歴」を押すと、いつ渡していつ返ったかが出ます。</p>
+    <p>ここで入れたサイズは、そのまま名簿のサイズになります。成長期の子は毎年変わるので、貸すときの実測がいちばん正確です。</p>
+  </div>
+  <div class="side see">
+    <p class="lbl">運営が見るもの</p>
+    <p>法被 M　<strong>貸出中</strong>　09/07<br>帯　購入済　04/12　2,000円</p>
+    <p>「いま誰が何を持っているか」が一覧で分かります。返却済みのものは灰色になります。</p>
+    <p>本人の画面には出しません。運営が把握していれば足りる、という判断です。</p>
+  </div>
+</div>
+
+<p class="scene">場面5　会費を集める<em>半年に1回だけ</em></p>
+<div class="pair">
+  <div class="side do">
+    <p class="lbl">会計の画面</p>
+    <p>まず期をつくります。「2026年度 後期・12,000円」と登録すると、全員が未入金の状態から始まります。</p>
+    <p><strong>「未入金の名前をコピー」</strong>で案内文を作り、LINEに流します。</p>
+    <p>あとは通帳とスクペイを見て、入金があった人のボタンを押すだけ。金額は入力しません。区分に応じて振込額はすでに決まっています。</p>
+  </div>
+  <div class="side see">
+    <p class="lbl">メンバー側</p>
+    <p>LINEで案内が届いて、スクペイか銀行で払います。サイトには会費の画面はありません。</p>
+    <p>中学生はスクペイのリンクから請求画面に直接飛べます。</p>
+  </div>
+</div>
+<p>6か月前払いなので、この作業は<strong>年に2回だけ</strong>です。毎月の請求管理はありません。</p>
+
+<h2>この5つで、何がデータになったか</h2>
+<p>特別なことは何もしていません。<strong>それぞれの人が、自分の担当のことを1回入力しただけ</strong>です。でも終わってみると、こうなっています。</p>
+<ul class="body">
+  <li>だれがメンバーか（保護者が入れた）</li>
+  <li>いつ何があるか（スケジュール担当が入れた）</li>
+  <li>だれが来るか（本人が押した）</li>
+  <li>だれが払ったか（会計が押した）</li>
+  <li>だれが何を借りているか（衣装担当が押した）</li>
+</ul>
+<p>これが全部、同じ一人ひとりにひもづいています。誰かが集計する時間は、どこにもありません。</p>
+
+<h2>だれが、何を入力するのか</h2>
+<table>
+  <tr><th>入力するもの</th><th>だれが</th><th>いつ</th></tr>
+  <tr><td>メンバーの登録</td><td class="c">保護者・本人</td><td>入会するとき（フォームに1回）</td></tr>
+  <tr><td>予定</td><td class="c">運営</td><td>決まったつど</td></tr>
+  <tr><td>出欠</td><td class="c">本人</td><td>予定が出たら</td></tr>
+  <tr><td>出欠の代理入力</td><td class="c">運営</td><td>LINEや口頭で連絡が来たとき</td></tr>
+  <tr><td>決まったこと</td><td class="c">運営</td><td>変わったつど（上書き）</td></tr>
+  <tr><td>動画のリンク</td><td class="c">運営</td><td>撮ったあと</td></tr>
+  <tr><td>会費の期</td><td class="c">運営</td><td>半年に1回</td></tr>
+  <tr><td>入金のチェック</td><td class="c">会計</td><td>通帳を見たとき</td></tr>
+  <tr><td>衣装の貸出・返却</td><td class="c">衣装担当</td><td>渡したとき・返ったとき</td></tr>
+</table>
+
+<h2>人を分けるのは、金額と分母のためだけ</h2>
+<p>区分はメンバーの画面には出ません。運営の名簿にだけあります。使うのは2か所だけです。</p>
+<table>
+  <tr><th>区分</th><th>会費 12,000円の払いかた</th><th>出欠</th></tr>
+  <tr><td><span class="chip c1">中学生</span></td><td>スクペイ 10,500円＋振込 1,500円</td><td class="c">数える</td></tr>
+  <tr><td><span class="chip c2">その他</span></td><td>振込 12,000円</td><td class="c">数える</td></tr>
+  <tr><td><span class="chip c3">踊らない保護者</span></td><td>なし</td><td class="c">数えない</td></tr>
+  <tr><td><span class="chip c4">運営</span></td><td colspan="2">区分ではなくチェック。どの区分の人にも付きます</td></tr>
+</table>
+<p>「その他」には、小学生も、高校生も、踊る大人も入ります。会費と出欠の扱いが同じなので、これ以上は分けていません。中学生は全員が神戸市立なので、中学生＝コベカツ対象として扱っています。</p>
+<div class="kome">小学生には西宮から来ている子がいます。その子が西宮の中学に進むと、はじめて「中学生だけどコベカツ対象外」が生まれます。そのときは区分を「その他」にすれば済みます。</div>
+
+<h2>名前ではなく、番号でつなぎます</h2>
+<p>ここだけ少し中身の話です。</p>
+<p>登録するとき、一人ひとりに見えない番号が付きます。出欠も、会費も、衣装も、その番号にぶら下がります。<strong>名前でつながないのは、表記がゆれるから</strong>です。「さくら」「サクラ」「山田さくら」を人間は同じ人だと分かりますが、機械は別人として扱います。番号にしておけば、名字が変わっても、ニックネームを変えても、記録はつながったままです。</p>
+<p>出欠を名前の記入ではなく<strong>一覧から選ぶ</strong>形にしているのも、同じ理由です。打ち間違いが入ると、あとで名寄せが崩れます。</p>
+
+<h2>見える範囲</h2>
+<ul class="body">
+  <li>メンバー用サイトには、<strong>個人情報を出しません</strong>。予定・出欠・決まったこと・動画だけです</li>
+  <li>出欠は半分公開。<strong>名前と出欠だけ</strong>メンバー同士で見えます（調整さんと同じ）</li>
+  <li>連絡先・保護者名・緊急連絡先は、運営用サイトの中だけ。見られる人を2〜3人に絞ります</li>
+  <li>住所は集めません。必要になったときだけ、別のところで扱います</li>
+</ul>
+<p>この形なら、メンバー用のURLが誰かに転送されても、出るのは「10/4の練習に誰が来るか」だけです。</p>
+
+<h2>できないこと</h2>
+<ul class="body">
+  <li><strong>スクペイの入金を自動で取り込むことはできません。</strong>スクペイの管理画面を見て、こちらでチェックします</li>
+  <li><strong>銀行振込の照合も手作業です。</strong>振込名義が本人と違うことが多いので、機械には判定できません</li>
+  <li>このサイトから会費を支払うことはできません。支払いはスクペイと銀行のまま</li>
+  <li>チャットは付けません。会話はLINEのほうが確実に強いので</li>
+  <li>他人の名前で出欠を押すことは、技術的には防げていません</li>
+</ul>
+
+<h2>確認したいこと</h2>
+<div class="todo">
+  <p><b>1.</b> コベカツ対象の中学生の残り1,500円は、振込で集めますか。デモは振込として作っています。</p>
+  <p><b>2.</b> クラブ運営者用の管理画面のURLを教えてください。保護者側は club-guardian.sukupay.jp ですが、運営側は別のはずです。</p>
+  <p style="margin-bottom:0"><b>3.</b> コベカツで入ってくる保護者は、星蘭のLINEグループに入りますか。入らないなら、そもそもURLをどう配るかを考える必要があります。</p>
+</div>
+
+<h2>まず何から</h2>
+<div class="flow">
+  <div class="step"><span class="n">1</span><div><b>予定・出欠・決まったこと・動画</b><span>いまの困りごとの大半はここです。まず5〜10人で使ってみます。個人情報を預からないので、始めるハードルも低いです。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">2</span><div><b>登録フォームと名簿</b><span>保護者に1回入力してもらい、番号でつなげる土台にします。ここから連絡先を預かることになるので、改めて相談します。</span></div></div>
+  <div class="arrow">▼</div>
+  <div class="step"><span class="n">3</span><div><b>会費・衣装</b><span>便利だと思えてから足します。</span></div></div>
+</div>
+
+<h2>作る・続けることについて</h2>
+<ul class="body">
+  <li><strong>費用は無料枠で収まる見込み</strong>です。独自のアドレスを取るなら年1,500円ほど</li>
+  <li>アカウントは<strong>星蘭のもの</strong>を作ります。個人のアカウントに紐づけません</li>
+  <li>中身はスプレッドシートなので、<strong>作った人が抜けてもデータは残ります</strong></li>
+  <li>いちばんの心配は、技術ではなく<strong>入力する人が続くか</strong>です。だから第1段階は、止まっても調整さんに戻るだけ、という小ささにしています</li>
+  <li>入力できる人を最初から複数にしておきたいです</li>
+</ul>
+
+</main>
+<footer>KOBE星蘭纏　情報管理のしくみ（案）／デモと合わせてご覧ください</footer>
+</div>
+</body>
+</html>

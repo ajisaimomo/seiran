@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOBE星蘭纏 運営デモ</title>
+<style>
+  :root{
+    --ai:#1B3358; --ai-usu:#E8EDF5;
+    --kurenai:#A6222E; --kincha:#B98A2B;
+    --sumi:#14181F; --hai:#5B6470;
+    --washi:#FBFAF7; --kumo:#E4E2DC; --shiro:#fff;
+    --mincho:"Yu Mincho","YuMincho","Hiragino Mincho ProN",serif;
+    --gothic:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:var(--gothic);background:#EFEEEA;color:var(--sumi);-webkit-text-size-adjust:100%}
+
+  .harness{max-width:920px;margin:0 auto;padding:18px 16px 40px}
+  .harness h1{font-family:var(--mincho);font-size:19px;font-weight:600;margin:0 0 2px;letter-spacing:.04em}
+  .harness p.lead{margin:0 0 14px;font-size:12.5px;line-height:1.7;color:#4A505A}
+  .switch{display:flex;gap:6px;background:#E1DFD9;padding:4px;border-radius:10px;width:fit-content;margin-bottom:6px}
+  .switch button{font-family:var(--gothic);font-size:12.5px;border:0;background:transparent;color:#4A505A;padding:7px 14px;border-radius:7px;cursor:pointer}
+  .switch button[aria-pressed="true"]{background:var(--shiro);color:var(--ai);font-weight:700;box-shadow:0 1px 2px rgba(20,24,31,.12)}
+  .switch button:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+  .demo-note{font-size:11.5px;color:#6A7080;margin:0 0 14px;line-height:1.7;border-left:3px solid var(--kincha);padding-left:9px}
+
+  .device{width:100%;max-width:420px;margin:0 auto;background:var(--washi);border-radius:22px;overflow:hidden;
+    display:flex;flex-direction:column;height:min(760px,84vh);box-shadow:0 10px 30px rgba(20,24,31,.16)}
+  @media (max-width:560px){
+    .harness{padding:12px 10px 24px}
+    .device{border-radius:14px;height:calc(100dvh - 200px);min-height:440px}
+  }
+
+  .appbar{background:var(--ai);color:#fff;padding:12px 16px 10px;flex:0 0 auto;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+  .appbar .team{font-family:var(--mincho);font-size:17px;letter-spacing:.14em;margin:0}
+  .appbar .who{font-size:11.5px;opacity:.82;margin:3px 0 0}
+  .appbar .swapname{background:rgba(255,255,255,.14);border:0;color:#fff;font-family:var(--gothic);
+    font-size:10.5px;padding:5px 9px;border-radius:6px;cursor:pointer;white-space:nowrap}
+  .appbar .swapname:focus-visible{outline:2px solid #fff;outline-offset:2px}
+  .collar{height:5px;background:var(--kurenai)}
+  .collar-thin{height:2px;background:var(--kincha)}
+
+  .screen{flex:1 1 auto;overflow-y:auto;padding:14px 14px 22px;-webkit-overflow-scrolling:touch}
+  .screen h2{font-family:var(--mincho);font-size:15px;margin:0 0 10px;font-weight:600;letter-spacing:.06em}
+  .screen h3{font-size:12.5px;margin:20px 0 8px;color:#4A505A;font-weight:700}
+
+  .card{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:14px}
+  .card + .card{margin-top:10px}
+  .next{border-top:4px solid var(--ai)}
+  .next .when{font-family:var(--mincho);font-size:23px;line-height:1.25;margin:0}
+  .next .kind{display:inline-block;font-size:11px;background:var(--ai-usu);color:var(--ai);padding:2px 8px;border-radius:4px;margin-bottom:7px}
+  .next .where{margin:6px 0 0;font-size:13.5px}
+  .next .memo{margin:8px 0 0;font-size:12px;color:#5B6470;line-height:1.7}
+
+  .ans{display:flex;gap:7px;margin-top:12px}
+  .ans button{flex:1;font-family:var(--gothic);font-size:13.5px;font-weight:700;padding:12px 0;
+    border:1.5px solid var(--kumo);background:var(--shiro);color:#4A505A;border-radius:9px;cursor:pointer}
+  .ans button:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+  .ans button[data-on="1"][data-v="参加"]{background:var(--ai);border-color:var(--ai);color:#fff}
+  .ans button[data-on="1"][data-v="未定"]{background:var(--kincha);border-color:var(--kincha);color:#fff}
+  .ans button[data-on="1"][data-v="欠席"]{background:var(--hai);border-color:var(--hai);color:#fff}
+  .deadline{font-size:11.5px;color:var(--kurenai);margin:9px 0 0}
+  .cmt{width:100%;margin-top:9px;font-family:var(--gothic);font-size:12.5px;padding:9px;border:1px solid var(--kumo);border-radius:8px}
+
+  /* 回答ずみのロック表示 */
+  .locked{margin-top:12px;background:#F4F6FA;border:1px solid #D9E0EB;border-radius:9px;padding:12px;
+    display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .locked .cur{font-size:13px}
+  .locked .cur b{font-size:15px}
+  .locked button{font-family:var(--gothic);font-size:12px;font-weight:700;padding:8px 13px;border-radius:8px;
+    border:1.5px solid var(--ai);background:var(--shiro);color:var(--ai);cursor:pointer;white-space:nowrap}
+
+  /* 名前えらび */
+  .pick{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+  .pick button{font-family:var(--gothic);font-size:14px;font-weight:700;padding:15px 6px;border-radius:10px;
+    border:1.5px solid var(--kumo);background:var(--shiro);color:var(--sumi);cursor:pointer}
+  .pick button:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
+  .pick button span{display:block;font-size:11px;color:#8A8F99;font-weight:400;margin-top:2px}
+
+  .row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--kumo);font-size:13px}
+  .row:last-child{border-bottom:0}
+  .sub{font-size:11.5px;color:#6A7080}
+  .tag{font-size:11px;padding:2px 8px;border-radius:11px;white-space:nowrap;align-self:flex-start}
+  .t-参加{background:var(--ai);color:#fff}
+  .t-未定{background:var(--kincha);color:#fff}
+  .t-欠席{background:var(--hai);color:#fff}
+  .t-未回答{background:#EDEBE5;color:#6A7080}
+  .chip{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:4px;margin-right:4px;border:1px solid}
+  .c-kobe{color:var(--kurenai);border-color:#E2B8BC;background:#FCF2F3}
+  .c-other{color:var(--ai);border-color:#C3CFE2;background:#F1F5FA}
+  .c-nodance{color:#4A505A;border-color:var(--kumo);background:#F4F3EF}
+  .c-staff{color:#6B5410;border-color:#E3D3A6;background:#FBF6E8}
+
+  .board dt{font-size:11.5px;color:#6A7080;margin-top:13px}
+  .board dt:first-child{margin-top:0}
+  .board dd{margin:3px 0 0;font-size:14px;line-height:1.6}
+  .board .upd{font-size:11px;color:#8A8F99;margin:16px 0 0}
+
+  .link{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid var(--kumo);font-size:13.5px;text-decoration:none;color:var(--sumi)}
+  .link:last-child{border-bottom:0}
+  .link .badge{font-size:10.5px;background:var(--kurenai);color:#fff;padding:2px 7px;border-radius:4px}
+  .link .arrow{color:#9AA0AA;font-size:12px}
+
+  .bars{display:flex;height:9px;border-radius:5px;overflow:hidden;margin:11px 0 8px;background:#EDEBE5}
+  .bars i{display:block;height:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11.5px;color:#4A505A}
+  .legend span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+  .lg-参加::before{background:var(--ai)}
+  .lg-未定::before{background:var(--kincha)}
+  .lg-欠席::before{background:var(--hai)}
+  .lg-未回答::before{background:#D6D3CB}
+
+  .todo{background:#FFF9EC;border:1px solid #EBDDBB;border-radius:11px;padding:12px;font-size:12.5px;line-height:1.9;margin-top:10px}
+  .todo b{color:var(--kurenai)}
+
+  label.f{display:block;font-size:11.5px;color:#6A7080;margin:11px 0 4px}
+  input.f,select.f,textarea.f{width:100%;font-family:var(--gothic);font-size:13.5px;padding:10px;
+    border:1px solid var(--kumo);border-radius:8px;background:var(--shiro);color:var(--sumi)}
+  .btn{width:100%;margin-top:14px;font-family:var(--gothic);font-size:14px;font-weight:700;
+    background:var(--ai);color:#fff;border:0;border-radius:9px;padding:13px;cursor:pointer}
+  .btn.sub{background:var(--shiro);color:var(--ai);border:1.5px solid var(--ai);margin-top:8px}
+  .btn:focus-visible{outline:2px solid var(--kurenai);outline-offset:2px}
+  .out{margin-top:12px;background:#F2F4F8;border:1px dashed #BFC8D6;border-radius:9px;padding:11px;font-size:12.5px;white-space:pre-wrap;line-height:1.8}
+  button.pay{font-family:var(--gothic);font-size:12px;font-weight:700;padding:8px 12px;border-radius:8px;cursor:pointer;
+    white-space:nowrap;align-self:center;border:1.5px solid var(--kurenai);background:var(--shiro);color:var(--kurenai)}
+  button.pay[data-done="1"]{border-color:var(--ai);background:var(--ai);color:#fff}
+
+  button.hist{font-family:var(--gothic);font-size:10.5px;margin-left:7px;padding:3px 8px;border-radius:6px;
+    border:1px solid var(--kumo);background:var(--shiro);color:#6A7080;cursor:pointer}
+  .histbox{background:#F5F4F0;border-radius:8px;padding:8px 11px;margin:0 0 6px;font-size:11.5px;color:#5B6470;line-height:1.9}
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tscroll table{width:100%;border-collapse:collapse;font-size:11.5px;white-space:nowrap}
+  .tscroll th,.tscroll td{padding:6px 8px;border-bottom:1px solid var(--kumo);text-align:left}
+  .tscroll th{background:var(--ai-usu);color:var(--ai);font-size:10.5px;font-weight:700}
+  .mask{color:#9AA0AA}
+  .note{font-size:11.5px;color:#6A7080;line-height:1.8;margin:14px 0 0}
+  .ask{border-left:3px solid var(--kurenai);padding-left:9px;font-size:11.5px;color:var(--kurenai);line-height:1.8;margin:12px 0 0}
+
+  .tabs{flex:0 0 auto;display:flex;background:var(--shiro);border-top:1px solid var(--kumo)}
+  .tabs button{flex:1;font-family:var(--gothic);font-size:10.5px;background:none;border:0;padding:9px 2px 11px;
+    color:#8A8F99;cursor:pointer;border-top:2.5px solid transparent}
+  .tabs button[aria-pressed="true"]{color:var(--ai);font-weight:700;border-top-color:var(--kurenai)}
+  .tabs button:focus-visible{outline:2px solid var(--ai);outline-offset:-2px}
+
+  .flow{max-width:420px;margin:16px auto 0;display:grid;gap:12px}
+  .fbox{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:13px 14px}
+  .fbox h2{font-family:var(--gothic);font-size:12px;margin:0 0 9px;color:#4A505A;font-weight:700}
+  .fitem{display:flex;gap:8px;font-size:12px;line-height:1.65;padding:6px 0;border-bottom:1px solid #F0EEE9}
+  .fitem:last-child{border-bottom:0}
+  .fitem b{flex:0 0 92px;font-weight:700;color:var(--sumi)}
+  .fitem span{color:#5B6470}
+  .fnone{font-size:11.5px;color:#8A8F99;margin:0}
+  .lentry{font-size:12px;line-height:1.7;padding:8px 0;border-bottom:1px solid #F0EEE9}
+  .lentry:last-child{border-bottom:0}
+  .lentry .act{font-weight:700}
+  .lentry .eff{color:#5B6470;display:block;margin-top:2px}
+  .lentry .eff::before{content:"→ ";color:var(--kurenai)}
+  @media (min-width:760px){ .flow{max-width:860px;grid-template-columns:1fr 1fr} }
+
+  @media (prefers-reduced-motion: no-preference){ .ans button,.btn{transition:background .12s ease,color .12s ease} }
+</style>
+</head>
+<body>
+<div class="harness">
+  <h1>KOBE星蘭纏　運営デモ</h1>
+  <p class="lead">LINEはそのまま。予定・出欠・決まったことを、いつでも見に行けるサイトにしたら、こう見える、という試作です。</p>
+
+  <div class="switch" role="group" aria-label="URLを切り替え">
+    <button data-mode="member" aria-pressed="true">メンバー用のURL</button>
+    <button data-mode="admin" aria-pressed="false">運営用のURL</button>
+  </div>
+  <p class="demo-note">氏名はダミーです。ログインはありません。メンバー用は誰が開いても同じ画面で、名前を選んで出欠を答えます。運営用は別のURLで、リンクを知っている人だけが開けます。</p>
+
+  <div class="device">
+    <div class="appbar">
+      <div><p class="team">KOBE 星蘭纏</p><p class="who" id="who"></p></div>
+      <div id="swap"></div>
+    </div>
+    <div class="collar"></div><div class="collar-thin"></div>
+    <div class="screen" id="screen"></div>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+
+  <div class="flow">
+    <div class="fbox"><h2>いま見ている画面の情報は、どこから来たか</h2><div id="src"></div></div>
+    <div class="fbox"><h2>操作すると、どこに反映されたか</h2><div id="log"></div></div>
+  </div>
+</div>
+
+<script>
+/* ===== データ（ダミー） ===== */
+const members = [
+  {id:"m01",name:"さくら", kubun:"中学生", grade:"中2", staff:false, size:"M"},
+  {id:"m02",name:"あおい", kubun:"中学生", grade:"中1", staff:false, size:"S"},
+  {id:"m03",name:"はると", kubun:"中学生", grade:"中3", staff:false, size:"L"},
+  {id:"m04",name:"ことは", kubun:"中学生", grade:"中3", staff:false, size:"M"},
+  {id:"m05",name:"りく",   kubun:"その他", grade:"中2（私立）", staff:false, size:"M"},
+  {id:"m06",name:"みお",   kubun:"その他", grade:"小5", staff:false, size:"S"},
+  {id:"m07",name:"れん",   kubun:"その他", grade:"小4（西宮）", staff:false, size:"SS"},
+  {id:"m08",name:"かえで", kubun:"その他", grade:"高1", staff:false, size:"M"},
+  {id:"m09",name:"なぎ",   kubun:"その他", grade:"大人", staff:true,  size:"L"},
+  {id:"m10",name:"あかり", kubun:"その他", grade:"大人", staff:false, size:"M"},
+  {id:"p01",name:"さくらの母", kubun:"踊らない保護者", grade:"—", staff:true,  size:"—"},
+  {id:"p02",name:"れんの父",   kubun:"踊らない保護者", grade:"—", staff:false, size:"—"}
+];
+members.forEach(m=>{ m.kobe = m.kubun==="中学生"; m.dance = m.kubun!=="踊らない保護者"; });
+const dancers = () => members.filter(m=>m.dance);
+const nameOf = id => (members.find(m=>m.id===id)||{}).name || id;
+const byId   = id => members.find(m=>m.id===id);
+
+let events = [
+  {id:"e1",kind:"練習",date:"10/4（日）",time:"14:00〜17:00",place:"高木公民館",
+   memo:"生田中体育館が使えないため場所変更。鳴子・水筒・タオル。",deadline:"10/1（水）まで"},
+  {id:"e2",kind:"出演",date:"10/12（日）",time:"集合 9:30／出番 11:20",place:"大阪メチャハピー祭",
+   memo:"衣装は法被＋帯。現地集合・現地解散。",deadline:"10/5（日）まで"},
+  {id:"e3",kind:"練習",date:"10/18（日）",time:"14:00〜17:00",place:"生田中学校 体育館",
+   memo:"新曲の通し稽古。",deadline:"10/15（水）まで"}
+];
+const att = {
+  e1:{m02:"参加",m03:"参加",m05:"参加",m06:"欠席",m08:"未定",m09:"参加",m10:"参加"},
+  e2:{m02:"参加",m03:"未定",m09:"参加"},
+  e3:{}
+};
+let period = {name:"2026年度 後期", fee:12000, point:10500, span:"2026年10月〜2027年3月"};
+let periodLog = [];
+function feeOf(m){ if(!m.dance) return null; const sp = m.kobe?period.point:0; return {bill:period.fee,sukupay:sp,furikomi:period.fee-sp}; }
+const paid = {m01:true,m02:true,m03:false,m04:true,m05:true,m06:false,m07:true,m08:true,m09:true,m10:false};
+/* 衣装は1行1件の記録として貯める。最新の1件がいまの状態になる */
+let costumeLog = [
+  {who:"m01",item:"法被",size:"S",act:"貸出",date:"2026-04-12",yen:""},
+  {who:"m01",item:"法被",size:"S",act:"返却",date:"2026-07-20",yen:""},
+  {who:"m01",item:"法被",size:"M",act:"貸出",date:"2026-09-07",yen:""},
+  {who:"m01",item:"帯",  size:"", act:"購入",date:"2026-04-12",yen:"2000"},
+  {who:"m02",item:"法被",size:"S",act:"貸出",date:"2026-09-07",yen:""},
+  {who:"m09",item:"法被",size:"L",act:"貸出",date:"2026-04-12",yen:""},
+  {who:"m09",item:"法被",size:"L",act:"返却",date:"2026-09-07",yen:""}
+];
+const STATE = {"貸出":"貸出中","返却":"返却済","購入":"購入済"};
+let openHist = {};
+function costumeNow(who){
+  const items = {};
+  costumeLog.filter(r=>r.who===who).forEach(r=>{
+    (items[r.item] = items[r.item]||[]).push(r);
+  });
+  return Object.entries(items).map(([item,rs])=>{
+    const sorted = rs.slice().sort((a,b)=>a.date<b.date?1:-1);
+    return {item, now:sorted[0], hist:sorted};
+  });
+}
+const jpDate = d => d ? d.slice(5).replace("-","/") : "";
+const media = [
+  {t:"「絆」振付（通し）",sub:"9/21 撮影",new:true,src:"Google ドライブ"},
+  {t:"「絆」サビだけ ゆっくり",sub:"9/21 撮影",new:false,src:"Google ドライブ"},
+  {t:"「纏」振付（通し）",sub:"8/24 撮影",new:false,src:"Google ドライブ"},
+  {t:"こども万博 当日の写真",sub:"9/12",new:false,src:"Google フォト"}
+];
+const board = [
+  ["次の練習","10/4（日）14:00〜17:00　高木公民館"],
+  ["次の出演","10/12（日）大阪メチャハピー祭　集合 9:30"],
+  ["出演の衣装","法被＋帯（鳴子は各自）"],
+  ["会費","後期分 12,000円（2,000円×6か月・前払い・返金なし）"],
+  ["提出物","入会申込書は10/4の練習日に持参"]
+];
+
+/* ===== 状態 ===== */
+let mode = "member", tab = "home";
+let me = null;                 /* ① 端末が覚えている名前。最初はまだ選んでいない */
+let unlocked = {};             /* ③ 「変更する」を押した予定だけ answer できる */
+const STATUS = ["参加","未定","欠席"];
+const $ = s => document.querySelector(s);
+const yen = n => n.toLocaleString("ja-JP")+"円";
+
+function counts(eid){
+  const a = att[eid]||{}, c = {参加:0,未定:0,欠席:0,未回答:0};
+  dancers().forEach(m => c[a[m.id]||"未回答"]++);
+  return c;
+}
+
+/* ===== ① 名前をえらぶ ===== */
+function pickName(){
+  return `<h2>あなたの名前をえらんでください</h2>
+  <p class="note" style="margin:0 0 4px">最初の1回だけです。次からは、この端末が覚えているので選ばずに開きます。</p>
+  <div class="pick">${dancers().map(m=>
+    `<button data-pick="${m.id}">${m.name}<span>${m.grade}</span></button>`).join("")}</div>
+  <p class="note">名前がない方は運営までお知らせください。踊らない保護者の方は、お子さんの名前をえらんでください。</p>`;
+}
+
+/* ===== ③ 出欠のボタン（回答ずみならロック） ===== */
+function ansBlock(eid, who, forceOpen){
+  const cur = (att[eid]||{})[who];
+  const open = forceOpen || unlocked[eid+who] || !cur;
+  if(!open){
+    return `<div class="locked">
+      <div class="cur">回答ずみ：<b class="tag t-${cur}" style="padding:3px 10px">${cur}</b></div>
+      <button data-unlock="${eid+who}">変更する</button>
+    </div>`;
+  }
+  return `<div class="ans" role="group" aria-label="出欠">
+    ${STATUS.map(s=>`<button data-ans="${eid}" data-who="${who}" data-v="${s}" data-on="${cur===s?1:0}" aria-pressed="${cur===s}">${s}</button>`).join("")}
+  </div>`;
+}
+
+/* ===== メンバー画面 ===== */
+function memberHome(){
+  if(!me) return pickName();
+  const e = events[0];
+  return `<div class="card next">
+    <span class="kind">${e.kind}</span>
+    <p class="when">${e.date}<br>${e.time}</p>
+    <p class="where">${e.place}</p>
+    <p class="memo">${e.memo}</p>
+    ${ansBlock(e.id, me)}
+    <p class="deadline">回答は ${e.deadline}</p>
+  </div>
+  <h3>今きまっていること</h3>
+  <div class="card">${board.slice(0,3).map(([k,v])=>`<div class="row"><span>${k}</span><span style="text-align:right">${v}</span></div>`).join("")}</div>
+  <h3>よく使うところ</h3>
+  <div class="card">
+    <a class="link" href="https://club-guardian.sukupay.jp/billings" target="_blank" rel="noopener"><span>スクペイクラブ<span class="sub"> ／ 請求の確認と支払い</span></span><span class="arrow">ひらく</span></a>
+    <a class="link" href="#" onclick="return false"><span>練習動画（Google ドライブ）</span><span class="arrow">ひらく</span></a>
+    <a class="link" href="#" onclick="return false"><span>写真アルバム（Google フォト）</span><span class="arrow">ひらく</span></a>
+  </div>
+  <p class="note">スクペイはWebなので、コベカツサポートのアプリを経由せず直接ひらけます。中学生以外の人にも出していますが、使うのはコベカツ対象の人だけです。</p>`;
+}
+function memberSched(){
+  if(!me) return pickName();
+  return `<h2>予定</h2>` + events.map(e=>{
+    const cur = (att[e.id]||{})[me] || "未回答";
+    return `<div class="card"><div class="row" style="border:0;padding:0">
+      <div><div style="font-weight:700">${e.date}　${e.kind}</div>
+      <div class="sub">${e.time}　${e.place}</div>
+      <div class="sub">${e.memo}</div>
+      <div class="sub">回答期限：${e.deadline}</div></div>
+      <span class="tag t-${cur}">${cur}</span></div>
+      ${ansBlock(e.id, me)}</div>`;
+  }).join("");
+}
+function boardScreen(){
+  return `<h2>決まっていること</h2><div class="card"><dl class="board">
+    ${board.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}
+    <p class="upd">最終更新 9/28　更新した人：運営</p></dl></div>
+  <p class="note">増える掲示板ではなく、上書きするホワイトボードです。いつ来ても、いま有効な内容だけが出ています。</p>`;
+}
+function mediaScreen(){
+  return `<h2>動画・写真</h2><div class="card">
+    ${media.map(m=>`<a class="link" href="#" onclick="return false">
+      <span>${m.t}<span class="sub"> ／ ${m.sub}・${m.src}</span></span>
+      ${m.new?'<span class="badge">最新</span>':'<span class="arrow">ひらく</span>'}</a>`).join("")}</div>
+  <p class="note">動画そのものはGoogle側に置いたまま。ここは整理された入口だけです。</p>`;
+}
+
+/* ===== 運営画面 ===== */
+function adminHome(){
+  const e = events[0], c = counts(e.id), tot = dancers().length;
+  const w = k => (c[k]/tot*100).toFixed(1)+"%";
+  const mihenji = dancers().filter(m=>!(att[e.id]||{})[m.id]).map(m=>m.name);
+  const mibarai = dancers().filter(m=>!paid[m.id]).map(m=>m.name);
+  return `<h2>いまの状況</h2>
+  <div class="card next">
+    <span class="kind">${e.kind}</span>
+    <p class="when" style="font-size:19px">${e.date}　${e.time}</p>
+    <p class="where">${e.place}</p>
+    <div class="bars">
+      <i style="width:${w("参加")};background:var(--ai)"></i><i style="width:${w("未定")};background:var(--kincha)"></i>
+      <i style="width:${w("欠席")};background:var(--hai)"></i><i style="width:${w("未回答")};background:#D6D3CB"></i></div>
+    <div class="legend"><span class="lg-参加">参加 ${c.参加}</span><span class="lg-未定">未定 ${c.未定}</span>
+      <span class="lg-欠席">欠席 ${c.欠席}</span><span class="lg-未回答">未回答 ${c.未回答}</span></div>
+    <p class="note">分母は踊る${tot}人。踊らない保護者2人は入りません。</p>
+  </div>
+  <div class="todo">未回答 <b>${mihenji.length}人</b>　${mihenji.join("・")||"なし"}<br>
+    会費未入金 <b>${mibarai.length}人</b>　${mibarai.join("・")||"なし"}</div>
+  <h3>運営がよく開くところ</h3>
+  <div class="card">
+    <a class="link" href="https://club-guardian.sukupay.jp/billings" target="_blank" rel="noopener"><span>スクペイクラブ（保護者側）<span class="sub"> ／ 請求一覧</span></span><span class="arrow">ひらく</span></a>
+    <a class="link" href="#" onclick="return false"><span>調整さん<span class="sub"> ／ 日程候補を決めるとき</span></span><span class="arrow">ひらく</span></a>
+    <a class="link" href="#" onclick="return false"><span>Google ドライブ（動画・写真）</span><span class="arrow">ひらく</span></a>
+  </div>
+  <p class="ask">要確認：クラブ運営者用の管理画面のURL。保護者側は club-guardian.sukupay.jp ですが、運営側は別のアドレスのはずです。</p>`;
+}
+function adminNew(){
+  return `<h2>予定をつくる</h2><div class="card">
+    <label class="f" for="nd">日付</label><input class="f" id="nd" value="11/8（日）">
+    <label class="f" for="nk">種類</label><select class="f" id="nk"><option>練習</option><option>出演</option><option>その他</option></select>
+    <label class="f" for="nt">時間</label><input class="f" id="nt" value="14:00〜17:00">
+    <label class="f" for="np">場所</label><input class="f" id="np" value="生田中学校 体育館">
+    <label class="f" for="nm">持ち物・メモ</label><textarea class="f" id="nm" rows="2">鳴子・水筒</textarea>
+    <label class="f" for="nl">回答期限</label><input class="f" id="nl" value="11/5（水）まで">
+    <button class="btn" id="mk">登録する</button>
+    <p class="note">この1回で、予定・出欠受付・メンバーのホームに同時に出ます。</p>
+  </div><div id="mkout"></div>`;
+}
+function adminAtt(){
+  const e = events[0], a = att[e.id]||{};
+  const g = k => dancers().filter(m=>(a[m.id]||"未回答")===k);
+  const sec = k => `<h3>${k}　${g(k).length}人</h3><div class="card">${
+    g(k).length ? g(k).map(m=>`<div class="row"><span>${m.name}<span class="sub">　${m.grade}</span></span><span class="tag t-${k}">${k}</span></div>`).join("")
+                : '<div class="sub">なし</div>'}</div>`;
+  const yet = g("未回答");
+  return `<h2>出欠　${e.date} ${e.kind}</h2>${sec("参加")}${sec("未定")}${sec("欠席")}
+  <h3>未回答　${yet.length}人</h3>
+  <div class="card">${yet.length ? yet.map(m=>`<div style="padding:10px 0;border-bottom:1px solid var(--kumo)">
+      <div style="font-weight:700">${m.name}<span class="sub">　${m.grade}</span></div>
+      ${ansBlock(e.id, m.id, true)}</div>`).join("") : '<div class="sub">全員そろいました</div>'}</div>
+  <button class="btn sub" id="cpyet">未回答の名前をコピー（LINEに貼る用）</button>
+  <div class="sub" id="cpyetmsg" style="margin-top:6px"></div>
+  <p class="note">LINEや口頭で来た連絡は、運営がここから代わりに入れられます。スクペイでは休みの連絡を受け取れないので、その受け皿がここです。</p>`;
+}
+function adminBoard(){
+  return `<h2>決まったこと・動画</h2>
+  <div class="card"><dl class="board">${board.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div>
+  <div class="card">
+    <label class="f" for="bk">項目</label><select class="f" id="bk">${board.map(([k])=>`<option>${k}</option>`).join("")}<option>（新しい項目）</option></select>
+    <label class="f" for="bn">新しい項目の名前</label><input class="f" id="bn" placeholder="例：集合場所">
+    <label class="f" for="bv">内容</label><input class="f" id="bv" value="10/4（日）14:00〜17:00　高木公民館">
+    <button class="btn" id="mkboard">書きかえる</button>
+    <p class="note">上書きなので増えません。メンバーの「決まっていること」がすぐ入れ替わります。</p>
+  </div>
+  <h3>動画・写真のリンクを足す</h3>
+  <div class="card">
+    <label class="f" for="vt">タイトル</label><input class="f" id="vt" value="「絆」振付（10/4版）">
+    <label class="f" for="vs">置き場所</label><select class="f" id="vs"><option>Google ドライブ</option><option>Google フォト</option></select>
+    <label class="f" for="vn">最新版として表示</label><select class="f" id="vn"><option>はい</option><option>いいえ</option></select>
+    <button class="btn" id="mkmedia">リンクを追加する</button>
+  </div>`;
+}
+function adminFee(){
+  const ds = dancers(), yet = ds.filter(m=>!paid[m.id]);
+  return `<h2>会費　${period.name}</h2>
+  <p class="sub" style="margin:-4px 0 10px">${period.span}　${yen(period.fee)}（2,000円×6か月・前払い・返金なし）</p>
+  <div class="todo">未入金 <b>${yet.length}人</b>　${yet.map(m=>m.name).join("・")||"なし"}</div>
+  <div class="card" style="margin-top:10px">${ds.map(m=>{
+    const f = feeOf(m);
+    return `<div class="row">
+      <div><div style="font-weight:700">${m.name}</div>
+      <div class="sub" style="margin-top:3px">${m.kobe?'<span class="chip c-kobe">中学生</span>':''}振込 ${yen(f.furikomi)}${m.kobe?'（ほかにポイント10,500円）':''}</div></div>
+      <button class="pay" data-pay="${m.id}" data-done="${paid[m.id]?1:0}">${paid[m.id]?'入金ずみ':'未入金'}</button>
+    </div>`;}).join("")}</div>
+  <button class="btn sub" id="cpfee">未入金の名前をコピー（LINEに貼る用）</button>
+  <div class="sub" id="cpfeemsg" style="margin-top:6px"></div>
+  <p class="note">通帳を見て押すだけ。6か月前払いなので、年に2回の作業です。踊らない保護者は会費なしなので出ません。</p>
+  <p class="ask">要確認：中学生の残り1,500円を振込で集めるのか。ここでは振込としています。</p>
+  <h3>新しい期をつくる</h3>
+  <div class="card">
+    <label class="f" for="pn">期の名前</label><input class="f" id="pn" value="2027年度 前期">
+    <label class="f" for="ps">対象期間</label><input class="f" id="ps" value="2027年4月〜9月">
+    <label class="f" for="pf">会費</label><input class="f" id="pf" value="12000">
+    <label class="f" for="pp">ポイント充当額</label><input class="f" id="pp" value="10500">
+    <button class="btn" id="mkperiod">この期に切り替える</button>
+    <p class="note">切り替えると全員が未入金に戻ります。前の期は下に残ります。</p>
+  </div>
+  ${periodLog.length?`<h3>前の期</h3><div class="card">${periodLog.map(p=>
+    `<div class="row"><span>${p.name}<span class="sub">　${p.span}</span></span><span>${yen(p.fee)}　入金${p.done}人</span></div>`).join("")}</div>`:''}`;
+}
+function adminList(){
+  const cls = {"中学生":"c-kobe","その他":"c-other","踊らない保護者":"c-nodance"};
+  return `<h2>名簿　${members.length}人</h2>
+  <div class="card">${members.map(m=>`<div class="row">
+    <div><div style="font-weight:700">${m.name}<span class="sub">　${m.grade}</span></div>
+    <div style="margin-top:4px"><span class="chip ${cls[m.kubun]}">${m.kubun}</span>${m.staff?'<span class="chip c-staff">運営</span>':''}</div></div>
+    <div style="text-align:right"><div class="sub">サイズ ${m.size}</div><div class="mask">連絡先 ●●●●</div></div>
+  </div>`).join("")}</div>
+  <p class="note">区分はメンバー画面には出ません。会費の金額と、出欠の分母を決めるためだけに使います。</p>
+  <h3>メンバーを追加</h3>
+  <div class="card">
+    <label class="f" for="an">氏名</label><input class="f" id="an" value="つばさ">
+    <label class="f" for="ak">区分</label><select class="f" id="ak"><option>中学生</option><option>その他</option><option>踊らない保護者</option></select>
+    <label class="f" for="ag">学年</label><input class="f" id="ag" value="中1">
+    <label class="f" for="as">衣装サイズ</label><input class="f" id="as" value="M">
+    <button class="btn" id="mkmem">名簿に追加する</button>
+    <p class="note">追加すると、名前をえらぶ画面・会費の未入金・出欠の未回答に同時に出ます。</p>
+  </div>`;
+}
+
+function adminCostume(){
+  return `<h2>衣装</h2>
+  <h3>いまの状態</h3>
+  <div class="card">${dancers().map(m=>{
+    const cs = costumeNow(m.id);
+    if(!cs.length) return "";
+    return `<div style="padding:10px 0;border-bottom:1px solid var(--kumo)">
+      <div style="font-weight:700;margin-bottom:5px">${m.name}</div>
+      ${cs.map(c=>{
+        const key = m.id+"|"+c.item, open = openHist[key];
+        return `<div class="row" style="padding:7px 0">
+          <span>${c.item}${c.now.size?" "+c.now.size:""}</span>
+          <span style="text-align:right">
+            <span class="tag ${c.now.act==="返却"?"t-未回答":"t-参加"}" style="align-self:auto">${STATE[c.now.act]}</span>
+            <span class="sub">　${jpDate(c.now.date)}${c.now.yen?"　"+Number(c.now.yen).toLocaleString()+"円":""}</span>
+            <button class="hist" data-hist="${key}">${open?"閉じる":"履歴 "+c.hist.length}</button>
+          </span></div>
+          ${open?`<div class="histbox">${c.hist.map(r=>
+            `<div>${jpDate(r.date)}　${r.act}${r.size?"　"+r.size:""}${r.yen?"　"+Number(r.yen).toLocaleString()+"円":""}</div>`).join("")}</div>`:""}`;
+      }).join("")}
+    </div>`;}).join("")}</div>
+  <p class="note">出ているのは最新の状態だけです。貸出と返却をくり返しても行は増えません。履歴を押すと、いつ渡していつ返ったかが出ます。</p>
+
+  <h3>記録する</h3>
+  <div class="card">
+    <label class="f" for="cw">だれに</label><select class="f" id="cw">${dancers().map(m=>`<option value="${m.id}">${m.name}</option>`).join("")}</select>
+    <label class="f" for="ci">品名</label><input class="f" id="ci" value="法被">
+    <label class="f" for="cz">サイズ</label><input class="f" id="cz" value="M">
+    <label class="f" for="ch">何をした</label><select class="f" id="ch"><option>貸出</option><option>返却</option><option>購入</option></select>
+    <label class="f" for="cd">日付</label><input class="f" id="cd" type="date" value="2026-10-04">
+    <label class="f" for="cy">金額（購入のときだけ）</label><input class="f" id="cy" placeholder="2000">
+    <button class="btn" id="mkcos">記録する</button>
+    <p class="note">同じ品名で記録すると、上の表示がその日付の状態に入れ替わります。ここで入れたサイズが、そのまま名簿のサイズになります。</p>
+  </div>`;
+}
+
+
+/* ===== たまっているデータの一覧 ===== */
+function tables(){
+  const memRows = members.map(m=>[m.id,m.name,m.kubun,m.grade,m.size,m.staff?"○":""]);
+  const evRows  = events.map(e=>[e.id,e.date,e.kind,e.time,e.place,e.deadline]);
+  const atRows  = [];
+  events.forEach(e=>dancers().forEach(m=>{
+    const v = (att[e.id]||{})[m.id]; if(v) atRows.push([e.id,m.id,m.name,v]);
+  }));
+  const feeRows = dancers().map(m=>{ const f=feeOf(m);
+    return [period.name,m.id,m.name,f.bill,f.sukupay||"",f.furikomi,paid[m.id]?"入金ずみ":"未入金"]; });
+  const cosRows = costumeLog.slice().sort((a,b)=>a.date<b.date?1:-1)
+    .map(r=>[r.who,nameOf(r.who),r.item,r.size||"",r.act,r.date,r.yen||""]);
+  return [
+    {key:"mem", name:"メンバー", head:["ID","氏名","区分","学年","衣装サイズ","運営"], rows:memRows},
+    {key:"ev",  name:"予定",     head:["ID","日付","種類","時間","場所","締切"], rows:evRows},
+    {key:"at",  name:"出欠",     head:["予定ID","メンバーID","氏名","回答"], rows:atRows},
+    {key:"fee", name:"会費",     head:["期","メンバーID","氏名","請求","ポイント","振込","状態"], rows:feeRows},
+    {key:"cos", name:"衣装",     head:["メンバーID","氏名","品名","サイズ","動き","日付","金額"], rows:cosRows}
+  ];
+}
+function adminData(){
+  return `<h2>たまっているデータ</h2>
+  <p class="note" style="margin:0 0 12px">画面に出ているものは、すべてこの5つの表から作られています。中身はGoogleスプレッドシートに、この形のまま入ります。</p>
+  ${tables().map(t=>`
+    <h3>${t.name}　${t.rows.length}行</h3>
+    <div class="card" style="padding:8px 10px">
+      <div class="tscroll"><table>
+        <tr>${t.head.map(h=>`<th>${h}</th>`).join("")}</tr>
+        ${t.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}
+      </table></div>
+      <button class="btn sub" data-csv="${t.key}" style="margin-top:9px">この表をCSVでコピー</button>
+    </div>`).join("")}
+  <p class="note">IDでつながっているので、氏名が変わっても記録はくずれません。出欠の表に氏名が入っているのは、見て分かるようにしただけです。</p>
+  <div class="sub" id="csvmsg" style="margin-top:6px"></div>`;
+}
+
+/* ===== どこから来たか ===== */
+const SOURCES = {
+  "member:home":[["名前","最初に1回えらぶだけ。次からは端末が覚えている"],["予定","運営が『予定』で1回登録したもの"],["出欠","押すとその場で保存。回答ずみなら『変更する』を押さないと変わらない"],["きまっていること","運営が『掲示』で上書きしたもの"]],
+  "member:sched":[["予定の一覧","運営が登録した順に並ぶ"],["自分の回答","本人が押した分と、運営が代理で入れた分"]],
+  "member:board":[["各項目","運営が『掲示』で書きかえる。上書きなので増えない"]],
+  "member:media":[["リンク","運営が『掲示』で追加。動画はGoogle側にあるまま"]],
+  "admin:home":[["集計","メンバーが押した回答をその場で数えている"],["未回答","踊る人のうち、まだ押していない人"],["未入金","『会費』でチェックが付いていない人"]],
+  "admin:newev":[["ここが入口","登録すると予定・出欠受付・全員のホームに同時に出る"],["LINE文面","登録内容から自動で作る"]],
+  "admin:att":[["回答","本人が押した分と、ここで代理入力した分が同じ場所に入る"],["コピー","未回答の名前をLINEに貼って催促する"]],
+  "admin:post":[["ここが入口","書きかえるとメンバーの『決まっていること』が入れ替わる"]],
+  "admin:fee":[["ここが入口","期をつくると全員の請求が入れ替わり、未入金に戻る"],["チェック","通帳を見て押す。支払いの督促はLINEに貼って行う"]],
+  "admin:cos":[["いまの状態","最新の記録1件だけを出している。履歴は畳んである"],["サイズ","ここで入れた値が名簿のサイズに上書きされる"],["ここが入口","貸した日・返った日を記録する"]],
+  "admin:data":[["この画面","入力されたものが、そのまま表になっているだけ"],["つながり","すべての行がメンバーIDでつながっている"],["書き出し","CSVでコピーすれば、そのままスプレッドシートに貼れる"]],
+  "admin:list":[["ここが入口","入会フォームから届いた内容。名簿・会費・出欠に同時に出る"],["区分","メンバー画面には出ない。金額と分母のためだけ"]]
+};
+function renderSrc(){
+  const rows = SOURCES[mode+":"+tab] || [];
+  $("#src").innerHTML = rows.length ? rows.map(([k,v])=>`<div class="fitem"><b>${k}</b><span>${v}</span></div>`).join("")
+                                    : '<p class="fnone">この画面は表示だけです。</p>';
+}
+let logs = [];
+function addLog(actor, act, effects){ logs.unshift({actor,act,effects}); if(logs.length>6) logs.pop(); }
+function renderLog(){
+  $("#log").innerHTML = logs.length
+    ? logs.map(l=>`<div class="lentry"><span class="act">${l.actor}：${l.act}</span>${l.effects.map(e=>`<span class="eff">${e}</span>`).join("")}</div>`).join("")
+    : '<p class="fnone">まだ何もしていません。名前をえらんで出欠を押す、運営で予定を登録する、などしてみてください。</p>';
+}
+
+/* ===== 描画 ===== */
+const SCREENS = {
+  member:{home:memberHome, sched:memberSched, board:boardScreen, media:mediaScreen},
+  admin:{home:adminHome, newev:adminNew, att:adminAtt, post:adminBoard, fee:adminFee, list:adminList, cos:adminCostume, data:adminData}
+};
+const TABS = {
+  member:[["home","ホーム"],["sched","予定"],["board","決まったこと"],["media","動画・写真"]],
+  admin:[["home","ホーム"],["newev","予定"],["att","出欠"],["post","掲示"],["fee","会費"],["cos","衣装"],["list","名簿"],["data","データ"]]
+};
+function render(){
+  $("#who").textContent = mode==="admin" ? "運営用ページ" : (me ? nameOf(me)+" として表示中" : "だれでも開けるページ");
+  $("#swap").innerHTML = (mode==="member" && me) ? '<button class="swapname" id="swapname">ちがう人</button>' : '';
+  $("#screen").innerHTML = SCREENS[mode][tab]();
+  $("#tabs").innerHTML = TABS[mode].map(([k,l])=>`<button data-tab="${k}" aria-pressed="${tab===k}">${l}</button>`).join("");
+  $("#screen").scrollTop = 0;
+  renderSrc(); renderLog();
+}
+function copyText(txt, msgEl){
+  navigator.clipboard?.writeText(txt).then(
+    ()=>$(msgEl).textContent="コピーしました",
+    ()=>$(msgEl).textContent="コピーできませんでした。手で選択してください。");
+}
+
+document.addEventListener("click", ev => {
+  const t = ev.target.closest("button");
+  if(!t) return;
+
+  if(t.dataset.mode){
+    mode = t.dataset.mode; tab = "home";
+    document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed", b.dataset.mode===mode));
+    render(); return;
+  }
+  if(t.dataset.tab){ tab = t.dataset.tab; render(); return; }
+
+  if(t.dataset.pick){
+    me = t.dataset.pick;
+    addLog("メンバー", `${nameOf(me)} として開いた`,
+      ["この端末が名前を覚えた。次からは選ばずに開く","ちがう人はヘッダーの『ちがう人』から切り替え"]);
+    render(); return;
+  }
+  if(t.id==="swapname"){ me = null; unlocked = {}; render(); return; }
+
+  if(t.dataset.unlock){ unlocked[t.dataset.unlock] = true; render(); return; }
+
+  if(t.dataset.ans){
+    const eid = t.dataset.ans, who = t.dataset.who, v = t.dataset.v;
+    att[eid] = att[eid] || {};
+    const before = att[eid][who];
+    att[eid][who] = v;
+    delete unlocked[eid+who];
+    addLog(mode==="admin" ? "運営（代理入力）" : nameOf(who),
+      `${nameOf(who)}の出欠を「${v}」にした${before?`（${before}から変更）`:""}`,
+      ["運営ホームの集計と未回答リストが変わった","運営『出欠』の一覧に名前が移った","本人の画面は回答ずみの表示に戻った"]);
+    render(); return;
+  }
+  if(t.dataset.pay){
+    const id = t.dataset.pay; paid[id] = !paid[id];
+    addLog("運営", `${nameOf(id)}の入金を${paid[id]?"記録した":"取り消した"}`,
+      ["運営ホームの未入金リストが変わった","未入金の名前コピーの中身も変わった"]);
+    render(); return;
+  }
+  if(t.id==="mk"){
+    const e = {id:"e"+(events.length+1), kind:$("#nk").value, date:$("#nd").value, time:$("#nt").value,
+               place:$("#np").value, memo:$("#nm").value, deadline:$("#nl").value};
+    events.push(e); att[e.id] = {};
+    addLog("運営", `${e.date} ${e.kind} を登録した`,
+      ["メンバーの『予定』タブに出た","この予定の出欠受付がはじまった（全員が未回答）","LINEに貼る文面ができた"]);
+    const line = `${e.date} ${e.time}　${e.place}（${e.kind}）\n${e.memo}\n出欠の回答はこちら → https://…\n${e.deadline}`;
+    render();
+    $("#mkout").innerHTML = `<div class="card"><div style="font-weight:700">登録しました</div>
+      <div class="out" id="linetext">${line}</div>
+      <button class="btn sub" id="cp">この文をコピー</button>
+      <div class="sub" id="cpmsg" style="margin-top:6px"></div></div>`;
+    return;
+  }
+  if(t.id==="cp"){ copyText($("#linetext").textContent, "#cpmsg"); return; }
+  if(t.id==="cpyet"){
+    const e = events[0];
+    const yet = dancers().filter(m=>!(att[e.id]||{})[m.id]).map(m=>m.name).join("・");
+    copyText(`【出欠まだの方】${yet}\n${e.date}の${e.kind}、${e.deadline}に回答をお願いします → https://…`, "#cpyetmsg");
+    addLog("運営","未回答の名前をコピーした",["LINEに貼って催促する"]); return;
+  }
+  if(t.id==="cpfee"){
+    const yet = dancers().filter(m=>!paid[m.id]).map(m=>m.name).join("・");
+    copyText(`【会費まだの方】${yet}\n${period.name} ${yen(period.fee)}のお振込をお願いします。`, "#cpfeemsg");
+    addLog("運営","未入金の名前をコピーした",["LINEに貼って案内する"]); return;
+  }
+  if(t.id==="mkboard"){
+    const key = $("#bk").value==="（新しい項目）" ? ($("#bn").value||"新しい項目") : $("#bk").value;
+    const hit = board.find(r=>r[0]===key);
+    if(hit) hit[1] = $("#bv").value; else board.push([key,$("#bv").value]);
+    addLog("運営", `「${key}」を書きかえた`,["メンバーの『決まっていること』が入れ替わった","上書きなので項目は増えていない"]);
+    render(); return;
+  }
+  if(t.id==="mkmedia"){
+    if($("#vn").value==="はい") media.forEach(x=>x.new=false);
+    media.unshift({t:$("#vt").value, sub:"いま追加", new:$("#vn").value==="はい", src:$("#vs").value});
+    addLog("運営", `動画リンク「${$("#vt").value}」を足した`,["メンバーの『動画・写真』に出た"]);
+    render(); return;
+  }
+  if(t.id==="mkperiod"){
+    periodLog.unshift({...period, done: dancers().filter(m=>paid[m.id]).length});
+    period = {name:$("#pn").value, span:$("#ps").value, fee:parseInt($("#pf").value,10)||0, point:parseInt($("#pp").value,10)||0};
+    members.forEach(m=>paid[m.id]=false);
+    addLog("運営", `${period.name} をつくった`,["全員が未入金に戻った","前の期は履歴に残った"]);
+    render(); return;
+  }
+  if(t.id==="mkmem"){
+    const id = "n"+(members.length+1);
+    const m = {id, name:$("#an").value||"名前なし", kubun:$("#ak").value, grade:$("#ag").value, staff:false, size:$("#as").value};
+    m.kobe = m.kubun==="中学生"; m.dance = m.kubun!=="踊らない保護者";
+    members.push(m); paid[id]=false;
+    addLog("運営", `${m.name}（${m.kubun}）を名簿に追加した`,
+      ["名前をえらぶ画面に出た（踊る人なら）","会費の未入金に出た","出欠の未回答に出た"]);
+    render(); return;
+  }
+  if(t.dataset.csv){
+    const tb = tables().find(x=>x.key===t.dataset.csv);
+    const csv = [tb.head, ...tb.rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")).join("\n");
+    copyText(csv, "#csvmsg");
+    addLog("運営", `${tb.name}の表をCSVでコピーした`,["スプレッドシートにそのまま貼れる"]);
+    return;
+  }
+  if(t.dataset.hist){ openHist[t.dataset.hist] = !openHist[t.dataset.hist]; render(); return; }
+  if(t.id==="mkcos"){
+    const id = $("#cw").value, item = $("#ci").value, act = $("#ch").value, size = $("#cz").value;
+    costumeLog.push({who:id, item, size, act, date:$("#cd").value, yen:$("#cy").value});
+    const changed = size && byId(id).size !== size;
+    if(size) byId(id).size = size;
+    addLog("運営", `${nameOf(id)}の ${item}${size?" "+size:""} を「${STATE[act]}」にした`,
+      ["いまの状態が入れ替わった（行は増えない）","前の記録は履歴に残った",
+       changed?`名簿の衣装サイズが ${size} に更新された`:"名簿のサイズは変わらず"]);
+    render(); return;
+  }
+});
+
+render();
+</script>
+</body>
+</html>
