@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KOBE星蘭纏　情報の置き場所　3つのやり方</title>
+<style>
+  :root{
+    --ai:#1B3358; --ai-usu:#EDF1F7;
+    --kurenai:#A6222E; --kincha:#B98A2B;
+    --sumi:#14181F; --hai:#5B6470;
+    --washi:#FBFAF7; --kumo:#E4E2DC; --shiro:#fff;
+    --p1:#06C755; --p1u:#EAF9F0;
+    --p2:#B98A2B; --p2u:#FBF6E8;
+    --p3:#1B3358; --p3u:#EDF1F7;
+    --mincho:"Yu Mincho","YuMincho","Hiragino Mincho ProN",serif;
+    --gothic:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#EFEEEA;color:var(--sumi);font-family:var(--gothic);line-height:1.85;-webkit-text-size-adjust:100%}
+  .page{max-width:720px;margin:0 auto;background:var(--washi);padding:0 0 60px}
+  header{background:var(--ai);color:#fff;padding:26px 26px 20px}
+  header .team{font-family:var(--mincho);font-size:15px;letter-spacing:.18em;margin:0 0 6px;opacity:.85}
+  header h1{font-family:var(--mincho);font-size:25px;font-weight:600;margin:0;letter-spacing:.05em;line-height:1.45}
+  header p{margin:10px 0 0;font-size:13px;opacity:.85}
+  .collar{height:5px;background:var(--kurenai)}
+  .collar-thin{height:2px;background:var(--kincha)}
+  main{padding:24px 26px 0}
+  @media (max-width:560px){ header{padding:20px 16px 16px} main{padding:18px 16px 0} }
+
+  h2{font-family:var(--mincho);font-size:19px;font-weight:600;margin:42px 0 12px;letter-spacing:.04em;
+     padding-bottom:7px;border-bottom:2px solid var(--ai)}
+  h2:first-child{margin-top:0}
+  p{font-size:14px;margin:0 0 14px}
+  .lead{font-size:14.5px}
+
+  .kome{border-left:3px solid var(--kincha);background:#FFFCF4;border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;margin:0 0 16px}
+  .todo{border-left:3px solid var(--kurenai);background:#FCF4F4;border-radius:0 8px 8px 0;padding:12px 14px;font-size:13px;margin:0 0 16px}
+  .todo b{color:var(--kurenai)}
+
+  /* 冒頭の3枚 */
+  .trio{display:grid;gap:11px;margin:0 0 20px}
+  @media(min-width:640px){ .trio{grid-template-columns:1fr 1fr 1fr} }
+  .card{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:15px 16px;border-top:5px solid var(--kumo)}
+  .card.a{border-top-color:var(--p1)} .card.b{border-top-color:var(--p2)} .card.c{border-top-color:var(--p3)}
+  .card .nm{font-family:var(--mincho);font-size:16px;font-weight:600;margin:0 0 3px}
+  .card .sub{font-size:11.5px;color:var(--hai);display:block;margin-bottom:9px;line-height:1.6}
+  .card p{font-size:12.5px;margin:0;color:#2A2F38;line-height:1.8}
+
+  /* パターン見出し */
+  .ptn{margin:46px 0 0;border-radius:12px 12px 0 0;padding:15px 18px 13px;color:#fff}
+  .ptn.a{background:#0A8F45} .ptn.b{background:#8C6716} .ptn.c{background:var(--ai)}
+  .ptn .no{font-size:11.5px;letter-spacing:.14em;opacity:.85;margin:0 0 3px}
+  .ptn h3{font-family:var(--mincho);font-size:20px;margin:0;font-weight:600;letter-spacing:.03em}
+  .ptn p{font-size:12.5px;margin:7px 0 0;opacity:.92;line-height:1.75}
+  .ptnbody{border:1px solid var(--kumo);border-top:0;border-radius:0 0 12px 12px;background:var(--shiro);padding:16px 16px 6px}
+
+  /* 流れのステップ */
+  .step{display:flex;gap:11px;align-items:flex-start;margin:0 0 14px}
+  .step .n{flex:0 0 25px;height:25px;border-radius:50%;color:#fff;font-size:12.5px;
+    display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:3px}
+  .a .n{background:#0A8F45} .b .n{background:#8C6716} .c .n{background:var(--ai)}
+  .step .bd{flex:1;min-width:0}
+  .step .ti{font-size:14px;font-weight:700;margin:0 0 6px}
+  .duo{display:grid;gap:7px}
+  @media(min-width:560px){ .duo{grid-template-columns:1fr 1fr} }
+  .side{border-radius:9px;padding:9px 11px;font-size:12.5px;line-height:1.8}
+  .side .lb{font-size:10.5px;font-weight:700;display:block;margin-bottom:2px;letter-spacing:.05em}
+  .a .side.do{background:var(--p1u)} .b .side.do{background:var(--p2u)} .c .side.do{background:var(--p3u)}
+  .side.do .lb{color:#0A6E37}
+  .b .side.do .lb{color:#8C6716} .c .side.do .lb{color:var(--ai)}
+  .side.see{background:#F6F5F1}
+  .side.see .lb{color:var(--hai)}
+  .note-s{display:block;font-size:12px;color:var(--kurenai);margin-top:6px;line-height:1.75}
+
+  .always{border:1px solid var(--kumo);border-radius:10px;padding:13px 15px;margin:0 0 20px}
+  .a .always{background:var(--p1u);border-color:#BFE6CE}
+  .b .always{background:var(--p2u);border-color:#E3D3A6}
+  .c .always{background:var(--p3u);border-color:#C3CFE2}
+  .always .ti2{font-family:var(--mincho);font-size:15.5px;font-weight:600;margin:0 0 6px}
+  .always p{font-size:12.5px;margin:0 0 7px;line-height:1.8}
+  .always p:last-child{margin:0}
+  .always .cav{color:var(--kurenai);font-size:12px}
+
+  .gloss{display:grid;gap:11px;margin:0 0 18px}
+  @media(min-width:620px){ .gloss{grid-template-columns:1fr 1fr} }
+  .gbox{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:14px 16px;border-left:5px solid var(--kumo)}
+  .gbox.g1{border-left-color:var(--p1)} .gbox.g2{border-left-color:var(--p2)}
+  .gbox.g3{border-left-color:var(--p3)} .gbox.g4{border-left-color:#8A8F99}
+  .gbox h4{margin:0 0 2px;font-size:14.5px;font-family:var(--mincho);font-weight:600}
+  .gbox .where{font-size:11.5px;color:var(--hai);display:block;margin-bottom:9px;line-height:1.6}
+  .gbox dl{margin:0;font-size:12.5px}
+  .gbox dt{font-weight:700;margin-top:8px}
+  .gbox dt:first-of-type{margin-top:0}
+  .gbox dd{margin:0;color:#2A2F38;line-height:1.75}
+  .gbox .none{margin-top:11px;font-size:12px;color:var(--kurenai);line-height:1.75;display:block;
+    border-top:1px dashed var(--kumo);padding-top:9px}
+
+  .verdict{display:grid;gap:9px;margin:14px 0 12px}
+  @media(min-width:560px){ .verdict{grid-template-columns:1fr 1fr} }
+  .vbox{border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.8}
+  .vbox b{display:block;font-size:13px;margin-bottom:4px}
+  .vgood{background:#F2F7F3;border:1px solid #CFE0D4}
+  .vgood b{color:#1E7A3C}
+  .vcare{background:#FCF4F4;border:1px solid #EBD3D5}
+  .vcare b{color:var(--kurenai)}
+  .vbox ul{margin:0;padding-left:1.1em} .vbox li{margin-bottom:4px}
+
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--shiro);
+    border:1px solid var(--kumo);border-radius:10px;overflow:hidden;margin:0 0 16px}
+  th,td{padding:9px 10px;border-bottom:1px solid var(--kumo);text-align:left;vertical-align:top}
+  th{background:var(--ai-usu);font-size:11.5px;color:var(--ai);font-weight:700}
+  th.ha{border-top:4px solid var(--p1)} th.hb{border-top:4px solid var(--p2)} th.hc{border-top:4px solid var(--p3)}
+  tr:last-child td{border-bottom:0}
+  td.k{font-weight:700;background:#FAF9F6;width:26%}
+  .maru{color:#1E7A3C;font-weight:700}
+  .sankaku{color:#8C6716;font-weight:700}
+  .batsu{color:var(--kurenai);font-weight:700}
+  .wrap{overflow-x:auto;margin:0 0 16px}
+  .wrap table{margin:0;min-width:540px}
+
+  ul.body{margin:0 0 16px;padding-left:1.2em;font-size:14px}
+  ul.body li{margin-bottom:7px}
+
+  .ask{background:var(--shiro);border:1px solid var(--kumo);border-radius:12px;padding:14px 16px;margin:0 0 10px}
+  .ask b{display:block;font-size:14.5px;margin-bottom:5px}
+  .ask span{font-size:12.5px;color:var(--hai);line-height:1.8}
+
+  footer{margin:44px 26px 0;padding-top:16px;border-top:1px solid var(--kumo);font-size:12px;color:#8A8F99}
+  @media print{
+    body{background:#fff} .page{max-width:none}
+    header,.ptn{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    h2{page-break-after:avoid} table,.step,.ask,.verdict{page-break-inside:avoid}
+    .wrap{overflow:visible} .wrap table{min-width:0}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+  <p class="team">KOBE 星蘭纏</p>
+  <h1>情報の置き場所<br>3つのやり方</h1>
+  <p>それぞれを選んだとき、日々の作業がどうなるかを追った資料です</p>
+</header>
+<div class="collar"></div><div class="collar-thin"></div>
+
+<main>
+
+<h2>この資料について</h2>
+<p class="lead">予定・出欠・決まったこと・動画をどこに置くか。組み合わせ方が3つあります。この資料は<strong>どれがよいかを決めるものではありません</strong>。ひとつの予定が決まってから当日を終えるまで、誰が何をすることになるかを、3つとも同じ順番で並べています。最後に一覧で見比べられます。</p>
+<div class="kome"><strong>どれを選んでも変わらないもの。</strong>おしゃべりや写真のやりとりはLINEのまま。コベカツの会費はスクペイのまま（神戸市の仕組みなので変えられません）。動画はGoogleドライブに置いたまま。名簿・会費・衣装の記録は3つのどれにも入っていないので、別にGoogleスプレッドシートを持ちます。</div>
+
+<div class="todo"><p style="margin-bottom:0"><b>読む前に、ひとつ。</b>このあとの3つの流れは、どれも「<strong>予定が決まる</strong>」から始まります。裏を返すと、3つとも<strong>予定が確定していることが前提</strong>です。話し合いの途中で日程が動いている段階では、どのやり方を選んでも登録できません。<br>「もうこれは確定」と誰かが判断して登録する。この一手だけは、道具では肩代わりできません。</p></div>
+
+<h2>3つの組み合わせ</h2>
+<div class="trio">
+  <div class="card a">
+    <p class="nm">①　LINEだけ</p>
+    <span class="sub">いまのグループの中で完結させる</span>
+    <p>新しく入れるものはゼロ。使っていない「イベント」と「ノート」を使います。</p>
+  </div>
+  <div class="card b">
+    <p class="nm">②　LINE＋公式アカウント</p>
+    <span class="sub">グループはそのまま、入口を足す</span>
+    <p>星蘭の公式アカウントを作り、いつでも見に行けるボタンの並びを用意します。</p>
+  </div>
+  <div class="card c">
+    <p class="nm">③　LINE＋BAND</p>
+    <span class="sub">グループは雑談用に残す</span>
+    <p>予定・出欠・決まったこと・写真を、団体運営用の無料アプリに移します。</p>
+  </div>
+</div>
+<p>②と③は、どちらもいまのLINEグループが残ります。<strong>LINEをやめる案はありません。</strong>違いは、足すものが「入口」か「置き場所」かです。</p>
+
+<h2>先に、言葉の説明</h2>
+<p>このあと機能の名前が出てきます。どれが何で、どこにあるものかを先にまとめます。<strong>同じ「LINE」でも、いまのグループと公式アカウントでは、中にあるものが違います。</strong></p>
+<div class="gloss">
+
+  <div class="gbox g1">
+    <h4>いまのLINEグループの中にあるもの</h4>
+    <span class="where">①で使います。②と③でもグループは残るので、これらは使えます</span>
+    <dl>
+      <dt>トーク</dt>
+      <dd>いつものメッセージのやりとり。上から下へ流れていきます</dd>
+      <dt>ノート</dt>
+      <dd>トークとは別にある、掲示板のようなページ。文章と写真を貼っておけます。トークと違って流れません。あとから入った人も過去のものを読めます</dd>
+      <dt>アナウンス</dt>
+      <dd>トークのメッセージを、トーク画面のいちばん上に固定するもの。5件まで。あとから入った人には見えません</dd>
+      <dt>イベント</dt>
+      <dd>日時と場所を登録すると、トークに予定として出て、参加・不参加・未定のボタンが付くもの</dd>
+      <dt>アルバム</dt>
+      <dd>写真をまとめて残す場所。動画は入れられません（有料会員をのぞく）</dd>
+    </dl>
+  </div>
+
+  <div class="gbox g2">
+    <h4>LINE公式アカウントの中にあるもの</h4>
+    <span class="where">②で足すもの。お店や自治体が使っているのと同じ仕組みです</span>
+    <dl>
+      <dt>ボタンの並び</dt>
+      <dd>画面の下にいつも出ているボタン。最大6つ。押すと、決めておいたページが開きます（正式には「リッチメニュー」と言います）</dd>
+      <dt>配信</dt>
+      <dd>友だち追加した人全員に一斉に送るメッセージ。無料だと月200通まで</dd>
+      <dt>1対1チャット</dt>
+      <dd>メンバーと個別にやりとりする画面。ほかの人には見えません</dd>
+    </dl>
+    <span class="none"><strong>ノート・アナウンス・イベント・アルバムはありません。</strong>公式アカウントはグループトークではなく「窓口」だからです。だから②では、決まったことの中身をGoogleドキュメントなど外のページに置いて、ボタンからつなぐ形になります。出欠も、いまのグループのイベント機能を使うことになります。</span>
+  </div>
+
+  <div class="gbox g3">
+    <h4>BANDの中にあるもの</h4>
+    <span class="where">③で足すもの。スポーツ少年団やPTAで使われている無料アプリです</span>
+    <dl>
+      <dt>掲示板</dt>
+      <dd>お知らせを投稿する場所。流れません。誰が読んだかが分かります</dd>
+      <dt>カレンダー</dt>
+      <dd>予定を登録する場所。出欠のボタンがそこに付きます。地図も入れられます</dd>
+      <dt>アルバム</dt>
+      <dd>写真の置き場</dd>
+      <dt>トーク</dt>
+      <dd>雑談や急ぎの連絡。掲示板とは別のタブなので、混ざりません</dd>
+    </dl>
+  </div>
+
+  <div class="gbox g4">
+    <h4>Googleのもの</h4>
+    <span class="where">①②③のどれを選んでも共通で使います</span>
+    <dl>
+      <dt>スプレッドシート</dt>
+      <dd>表。名簿・会費・衣装をここに書きます。運営だけが開ける範囲にします</dd>
+      <dt>フォーム</dt>
+      <dd>入力してもらう用紙。送信されると、その内容が自動で表に入ります</dd>
+      <dt>ドライブ／フォト</dt>
+      <dd>動画や写真の置き場。LINEに上げた動画は消えるので、残したいものはここに入れます</dd>
+      <dt>ドキュメント</dt>
+      <dd>文章のページ。②で「決まったこと」の中身を置くのに使います</dd>
+    </dl>
+  </div>
+
+</div>
+
+<!-- ============ ① ============ -->
+<div class="ptn a">
+  <p class="no">やり方 ①</p>
+  <h3>LINEだけ</h3>
+  <p>足すものなし。いまのグループの中で、イベント機能とノート機能を使います。</p>
+</div>
+<div class="ptnbody a">
+
+  <div class="always">
+    <p class="ti2">いつも置いてあるもの</p>
+    <p>グループのノートに「<strong>いま決まっていること</strong>」を1枚。次の練習／次の出演／衣装／会費／提出物。増やさず、変わったら上書きします。</p>
+    <p>トークがどれだけ流れても、この1枚を開けば今の状態が分かります。<strong>この資料でいちばん大事なのはここです。</strong>下の流れは、この1枚を保つための作業だと思ってください。</p>
+    <p><strong>この1枚は「アナウンス」に固定できます。</strong>固定するとトーク画面のいちばん上に出たままになるので、トークがどれだけ流れても、開けばそこにあります。最初に1回固定すれば、あとは中身を書きかえるだけです。</p>
+    <p class="cav">気をつける点が2つ。ノートは編集しても<strong>ノート一覧の順番は変わらない</strong>ので、一覧から探す人は下のほうを見ることになります。もう1つ、<strong>アナウンスはあとから入った人には見えません。</strong>新しく入った子には、入会のときに「ここを見てね」と個別に伝える必要があります。</p>
+  </div>
+
+  <div class="step">
+    <span class="n">1</span>
+    <div class="bd">
+      <p class="ti">予定が決まる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>グループの「イベント」を作り、日時と場所を入れる。持ち物やメモを入れる欄はない。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>トークに予定が出る。日が近づくと通知が届く。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">2</span>
+    <div class="bd">
+      <p class="ti">回答をお願いする</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>イベントには<strong>回答の締切を入れる欄がない</strong>。トークに一言流して、いつまでに答えてほしいかを伝える。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>トークに予定と、いつまでに押せばよいかが出る。</div>
+      </div>
+      <span class="note-s">イベントには当日前のリマインダーがあり、1週間前／1日前／2時間前／1時間前から選べます。ただしこれは予定の通知で、回答の締切とは別です。1週間前に設定すれば催促の代わりにはなります。<br><strong>持ち物やメモは、トークに書くかノートに書くか、どちらかに決めておくと迷いません。</strong></span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">3</span>
+    <div class="bd">
+      <p class="ti">出欠を答える</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>イベントを開けば回答が見える。集計はしない。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>参加・不参加・未定のボタンを1回押す。ほかの人の回答も見える。</div>
+      </div>
+      <span class="note-s"><strong>担当が代わりに入れることはできません。</strong>作成者が編集できるのはイベントの内容（タイトル・日時・場所）だけです。電話や個別LINEで連絡が来た人は、回答なしのまま残ります。人数を正確に知りたい場合は、担当が別に書き留めることになります。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">4</span>
+    <div class="bd">
+      <p class="ti">直前に変更がある（場所が変わった、集合時間が変わった）</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>イベントを編集し、トークにも一言流す。大事なものは「アナウンス」でトークの上に固定する（1つのトークにつき5件まで）。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>トークに流れてくる。固定したものは上に残る。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">5</span>
+    <div class="bd">
+      <p class="ti">動画と写真が出てくる（練習日の振付動画、出演のあとの写真）</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>撮った人がLINEに上げる。そのままだと動画は消えるので、Googleドライブへ移す。移し方は2つ。<strong>撮った人に直接上げてもらう</strong>（フォルダのリンクを渡しておく）か、<strong>受け取って上げ直す人を決める</strong>か。上げたらノートにリンクを貼る。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>ノートを開くとリンクが並んでいる。あとから入った人も、過去の振付動画にたどり着ける。</div>
+      </div>
+      <span class="note-s">LINEのトークに上げた動画は、一定期間がたつと見られなくなります。ノートに動画を入れる機能は2024年2月に終了。アルバムに動画を入れられるのはLYPプレミアム（有料）の人だけです。写真はアルバムに入れれば残ります。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">6</span>
+    <div class="bd">
+      <p class="ti">決まったことが変わる（衣装、集合場所、提出物）</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>ノートを開いて書きかえるだけ。アナウンスに固定してあれば、固定はそのまま残る。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>ノートを開くと、いま有効な内容が出ている。</div>
+      </div>
+      <span class="note-s">ノートは1本の列に並びます。予定・衣装・提出物を分けて置くことはできません。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">7</span>
+    <div class="bd">
+      <p class="ti">新しい人が入る</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span><strong>①情報をもらう。</strong>Googleフォームに保護者が入力するか、紙の入会申込書から書き写す。<br><strong>②名簿シートに1行足して、番号を振る。</strong><br><strong>③LINEグループに招待する。</strong>「はじめての方へ」をノートに1枚書いておく。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>入る前のトークは遡れないが、<strong>ノートは過去のものも読める</strong>。</div>
+      </div>
+      <span class="note-s">①と②は3つのどのやり方でも同じです。上に固定した「アナウンス」は、入る前のものは見えません。残したいことはノートに書く必要があります。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">8</span>
+    <div class="bd">
+      <p class="ti">当日「休みます」の連絡が来る</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>グループのトークで受ける。返事はスタンプだけでよい。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>いつものグループに一言書く。当日はここがいちばん確実。</div>
+      </div>
+      <span class="note-s">当日の朝は連絡が集中します。場所変更などの大事な連絡は、流す前にアナウンスで固定しておくと埋もれません。</span>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="vbox vgood"><b>いいところ</b>
+      <ul>
+        <li>メンバーに頼むことがゼロ。今日から始められる</li>
+        <li>覚えるのは担当だけ。ボタンの位置を2つ覚えれば足りる</li>
+        <li>費用がかからない</li>
+        <li>合わなければ、そのままやめられる</li>
+      </ul>
+    </div>
+    <div class="vbox vcare"><b>気をつけるところ</b>
+      <ul>
+        <li>置き場所が1本。すべてが同じノート一覧に並ぶ</li>
+        <li>ノートは編集しても一覧の上に来ない。ただし<strong>アナウンスに固定すれば</strong>トークの上に出たままになる</li>
+        <li>そのアナウンスは、<strong>あとから入った人には見えない</strong>。入会時に個別の案内が要る</li>
+        <li><strong>衣装の貸出・返却、会費、名簿を置く場所がない。</strong>LINEの外にスプレッドシートを作り、運営がそこへ行って記録する流れを、別に決めることになる</li>
+        <li>回答の締切を設定できないので、いつまでに答えるかと催促は、毎回トークに書くことになる</li>
+        <li>誰でも投稿できるので、大事なことも雑談も同じ流れに乗る</li>
+        <li>LINEはノートの機能を少しずつ減らしている（2024年2月に動画、2026年9月に一部の投稿機能）。中身をGoogleドキュメントに置いてノートにはリンクだけ貼ると、この影響を受けにくくなる</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ② ============ -->
+<div class="ptn b">
+  <p class="no">やり方 ②</p>
+  <h3>LINE ＋ 公式アカウント</h3>
+  <p>グループはそのまま。星蘭の公式アカウントを作り、画面の下にボタンの並び（最大6つ）を常に出しておきます。</p>
+</div>
+<div class="ptnbody b">
+
+  <div class="always">
+    <p class="ti2">いつも置いてあるもの</p>
+    <p>公式アカウントの画面の下に、ボタンが並びます。「予定」「決まったこと」「動画」「スクペイ」など、押せばいつでも同じ場所が開きます。</p>
+    <p><strong>公式アカウントにはノートがありません。</strong>だから「決まったこと」の中身は、Googleドキュメント（文章のページ）に書いて、ボタンからそこへつなぎます。次の練習／次の出演／衣装／会費／提出物を、その1ページに置きます。</p>
+    <p>トークがどれだけ流れても、<strong>ボタンの位置は動きません</strong>。①のノートのように下へ沈むことがない形です。</p>
+    <p class="cav">書きかえるのはGoogleドキュメントのほうなので、開く場所がLINEの外になります。ボタンは最大6つまでです。</p>
+  </div>
+
+  <div class="step">
+    <span class="n">1</span>
+    <div class="bd">
+      <p class="ti">予定が決まる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span><strong>いまのLINEグループで</strong>「イベント」を作る（①と同じ）。<strong>そのうえで公式アカウント側で</strong>、「予定」ボタンの先にあるページを更新する。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>トークに予定が出る。あとから見たいときは公式アカウントの「予定」を押す。</div>
+      </div>
+      <span class="note-s">入れる場所が2か所になります。片方だけ直すと食い違います。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">2</span>
+    <div class="bd">
+      <p class="ti">回答をお願いする</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>①と同じく、締切はトークに書いて伝える（イベントに締切の欄はない）。公式アカウントから配信もできるが、<strong>配信は月200通まで</strong>。21人だと1回で21通なので、月9回ほどが上限。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>グループと公式アカウント、両方から通知が来ることになる。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">3</span>
+    <div class="bd">
+      <p class="ti">出欠を答える</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>公式アカウントには出欠の機能がないので、<strong>いまのLINEグループのイベント機能で取る</strong>（①と同じ）。または調整さんやGoogleフォームのURLを、公式アカウントのボタンに入れておく。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>①と同じか、ボタンからリンク先に飛んで答える。</div>
+      </div>
+      <span class="note-s">公式アカウント自体で出欠を取るには、有料の追加ツールが必要です。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">4</span>
+    <div class="bd">
+      <p class="ti">直前に変更がある</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>急ぎはグループのトークに流す。公式アカウントの配信は通数を使うので、使いどころを選ぶ。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>いつものトークに流れてくる。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">5</span>
+    <div class="bd">
+      <p class="ti">動画と写真が出てくる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>①と同じく、撮った人に直接Googleドライブへ上げてもらうか、上げ直す人を決める。ボタンはすでにドライブのフォルダにつないであるので、<strong>リンクを貼り直す作業はない</strong>。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>「動画」ボタンを押せば、いつでもフォルダが開く。探さなくてよい。</div>
+      </div>
+      <span class="note-s">撮った人にドライブへ上げてもらう場合、フォルダのリンクをボタンから渡せるので、毎回URLを送り直さずに済みます。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">6</span>
+    <div class="bd">
+      <p class="ti">決まったことが変わる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>ボタンの先のGoogleドキュメントを開いて書きかえる。ボタン側はさわらない。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>「決まったこと」ボタンを押すと、いま有効な内容が出る。ボタンの場所は毎回同じ。</div>
+      </div>
+      <span class="note-s">①のようにノートが下に沈む心配はありません。そのかわり、書きかえる場所がLINEの外（Googleドキュメント）になります。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">7</span>
+    <div class="bd">
+      <p class="ti">新しい人が入る</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span><strong>①情報をもらう</strong>（フォームか紙から転記）。<strong>②名簿シートに1行足して番号を振る。</strong><br><strong>③グループに招待し、公式アカウントを友だち追加してもらう。</strong></div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>ボタンの並びは、いつ追加した人にも同じものが出る。過去の配信は読めないが、ボタンの先は最初から全部見られる。</div>
+      </div>
+      <span class="note-s">入会のフォームへのリンクを、ボタンの1つに入れておくこともできます。案内するときにURLを送り直さずに済みます。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">8</span>
+    <div class="bd">
+      <p class="ti">「休みます」「これはどうすれば」を受ける</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span><strong>当日の欠席はグループのトークで受ける</strong>（そのほうが早く気づく）。事前の相談や、人に言いにくいことは公式アカウントの1対1チャットで受ける。1対1は配信の通数に数えられない。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>当日はいつものグループに一言。事前の相談はグループに出さずに聞ける。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="vbox vgood"><b>いいところ</b>
+      <ul>
+        <li>いつでも同じ場所に入口がある。あとから入った人も同じものが見える</li>
+        <li>発信できるのは管理権限を持つ人だけ。お知らせの出どころが決まる</li>
+        <li>個別の相談を1対1で受けられる（無料）</li>
+        <li>情報がボタンごとに分かれて置ける</li>
+      </ul>
+    </div>
+    <div class="vbox vcare"><b>気をつけるところ</b>
+      <ul>
+        <li>予定を入れる場所が2か所になる</li>
+        <li><strong>衣装の貸出・返却、会費、名簿の機能はない。</strong>スプレッドシートを別に作ることになる</li>
+        <li><strong>ボタンはメンバーと運営で分けられない。</strong>管理画面ではボタンの出し分けができないため、運営用シートへのリンクを置くと全員に見えます。運営用は各自ブックマークすることになります</li>
+        <li>ボタンはパソコン版のLINEでは表示されません。スマホ専用と考えることになります</li>
+        <li>メンバーが見る場所も2つになる</li>
+        <li>最初の設定（ボタンの画像とリンク）に手間がかかる</li>
+        <li>配信は月200通（21人で月9回ほど）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ③ ============ -->
+<div class="ptn c">
+  <p class="no">やり方 ③</p>
+  <h3>LINE ＋ BAND</h3>
+  <p>LINEグループは雑談用に残し、予定・出欠・決まったこと・写真をBANDへ移します。BANDは無料で、スマホでもパソコンでも使えます。</p>
+</div>
+<div class="ptnbody c">
+
+  <div class="always">
+    <p class="ti2">いつも置いてあるもの</p>
+    <p>掲示板・カレンダー・アルバムが、それぞれ別のタブとして並んでいます。「いま決まっていること」は掲示板に置きます。トークは別のタブなので、雑談がどれだけ流れても掲示板には入ってきません。</p>
+    <p>置き場所が種類ごとに分かれているのが、3つの中でいちばんはっきりしている形です。</p>
+    <p class="cav">掲示板も投稿が積み上がりますが、「お知らせ登録」をすると一覧の上に出せます。どの投稿をお知らせにするか、決めておく必要はあります。</p>
+  </div>
+
+  <div class="step">
+    <span class="n">1</span>
+    <div class="bd">
+      <p class="ti">予定が決まる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>BANDのカレンダーに登録する。日時・場所・地図が入れられて、出欠確認もそこに付く。<strong>1か所で終わる。</strong></div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>BANDに通知が届く。カレンダーを開けば先の予定も並んで見える。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">2</span>
+    <div class="bd">
+      <p class="ti">知らせる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>登録すればBANDから通知される。慣れるまでは、LINEグループにも一言流す。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>BANDから通知が来る。LINEとBANDの両方を見る時期がしばらく続く。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">3</span>
+    <div class="bd">
+      <p class="ti">出欠を答える</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>カレンダーの予定を開けば回答が見える。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>予定を開いて出欠を押す。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">4</span>
+    <div class="bd">
+      <p class="ti">直前に変更がある</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>掲示板に投稿する。誰が読んだかが分かる。急ぎならBANDのトーク、またはLINEグループ。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>掲示板に出る。雑談と混ざらない。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">5</span>
+    <div class="bd">
+      <p class="ti">動画と写真が出てくる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>BANDのアルバムに入れる。またはGoogleドライブへ上げてもらい、リンクを掲示板に貼る。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>アルバムを開く。あとから入った人も過去のものを見られる。</div>
+      </div>
+      <span class="note-s">BANDのアルバムに動画を入れられるか、容量に上限があるかは確認できていません。動画をGoogleドライブに置く形にすれば、この点は問題になりません。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">6</span>
+    <div class="bd">
+      <p class="ti">決まったことが変わる</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>掲示板に投稿する。トークとは別の場所なので流れない。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>掲示板を開けば、過去のものも遡って読める。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">7</span>
+    <div class="bd">
+      <p class="ti">新しい人が入る</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span><strong>①情報をもらう</strong>（フォームか紙から転記）。<strong>②名簿シートに1行足して番号を振る。</strong><br><strong>③招待URLを送る。</strong></div>
+        <div class="side see"><span class="lb">メンバーに見えること</span><strong>アプリを入れて会員登録してから参加する。</strong>参加後は掲示板の過去投稿を全部読める。</div>
+      </div>
+      <span class="note-s">登録はLINE・Apple・Facebookのアカウントでもできます。その場合もLINEのトーク内容や友だちリストは連動しません。ここを越えられない人が出ると、その人にだけLINEで別に伝えることになり、二重管理が始まります。<br>参加は承認制にでき、参加するときに質問を出せます。衣装サイズなどをここで聞くこともできますが、<strong>BANDに名簿の機能はない</strong>ので、結局スプレッドシートに書き写すことになります。</span>
+    </div>
+  </div>
+
+  <div class="step">
+    <span class="n">8</span>
+    <div class="bd">
+      <p class="ti">当日「休みます」の連絡が来る</p>
+      <div class="duo">
+        <div class="side do"><span class="lb">担当がすること</span>LINEグループのトークで受ける。BANDに移さなくてよい。</div>
+        <div class="side see"><span class="lb">メンバーに見えること</span>いつものグループに一言書く。当日はここがいちばん確実。</div>
+      </div>
+      <span class="note-s">予定と決まったことはBANDに移しても、<strong>当日の急ぎだけはLINEに残す</strong>のが現実的です。全員が必ず開くのはLINEのほうだからです。</span>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="vbox vgood"><b>いいところ</b>
+      <ul>
+        <li>予定を入れる場所が1か所で済む。出欠もそこに付く</li>
+        <li>掲示板・カレンダー・アルバム・トークが分かれている</li>
+        <li>あとから入った人が、過去の掲示板を全部読める</li>
+        <li><strong>投稿できる人を絞れる。</strong>掲示板の投稿・コメント、予定の追加、写真の追加まで、機能ごとに権限を設定できる</li>
+        <li>メンバー同士のトークを止めて、運営とだけやりとりする形にもできる</li>
+        <li>参加は承認制にでき、参加時に質問を設定できる（衣装サイズなどをここで聞ける）</li>
+        <li><strong>出欠に回答の締切を設定できる。</strong>①②にはない機能です</li>
+        <li><strong>アプリを入れていない人も、出欠だけは答えられます。</strong>予定を作るときに「外部参加者を招待」をオンにすると、メール認証だけで回答できます</li>
+        <li>パソコンからも使える。無料</li>
+      </ul>
+    </div>
+    <div class="vbox vcare"><b>気をつけるところ</b>
+      <ul>
+        <li>全員にアプリの導入と会員登録を頼むことになる</li>
+        <li>LINEグループも残るので、見る場所は2つになる</li>
+        <li><strong>名簿と会費の管理機能はない。</strong>①②と同じくスプレッドシートを別に持つことになる</li>
+        <li><strong>無料プランには保存容量の上限があり、超えると古いものから順に削除されます。</strong>動画をたくさん置くと当たります（追加は100GBで年5,000円）。動画をGoogleドライブに置けば当たりません</li>
+        <li>個別トークの保存期間は1年。掲示板の投稿がいつまで残るかは明示されていません</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<h2>3つを並べる</h2>
+<div class="wrap">
+<table>
+  <tr>
+    <th></th>
+    <th class="ha">①LINEだけ</th>
+    <th class="hb">②LINE＋公式</th>
+    <th class="hc">③LINE＋BAND</th>
+  </tr>
+  <tr><td class="k">予定を入れる場所</td><td>1か所</td><td><span class="sankaku">2か所</span></td><td>1か所</td></tr>
+  <tr><td class="k">持ち物やメモが<br>予定に書けるか</td><td><span class="batsu">書けない</span></td><td><span class="batsu">書けない</span><br>（別ページに書く）</td><td><span class="maru">書ける</span></td></tr>
+  <tr><td class="k">出欠</td><td><span class="maru">イベント機能</span></td><td><span class="sankaku">公式には機能なし</span><br><span class="maru">イベント機能</span>か調整さん</td><td><span class="maru">カレンダーに付く</span></td></tr>
+  <tr><td class="k">担当が代わりに<br>入力できるか</td><td><span class="batsu">できない</span></td><td><span class="batsu">できない</span><br>調整さんなら<span class="maru">できる</span></td><td>要確認</td></tr>
+  <tr><td class="k">回答の締切を<br>設定できるか</td><td><span class="batsu">できない</span><br>トークで伝える</td><td><span class="batsu">できない</span><br>トークで伝える</td><td><span class="maru">できる</span></tr>
+  <tr><td class="k">「いま決まっている<br>こと」を見る場所</td><td>ノートの1枚</td><td>ボタンの1つ</td><td>掲示板</td></tr>
+  <tr><td class="k">そこが埋もれるか</td><td><span class="maru">埋もれない</span><br>アナウンスに固定できる<br><span style="color:#A6222E">（新しい人には見えない）</span></td><td><span class="maru">埋もれない</span><br>ボタンは動かない</td><td><span class="maru">埋もれない</span><br>「お知らせ登録」で<br>上に出せる</td></tr>
+  <tr><td class="k">決まったことの<br>置き場</td><td>ノート（1本）</td><td>ボタンの先の<br>外部ページ</td><td>掲示板</td></tr>
+  <tr><td class="k">種類ごとに<br>分けられるか</td><td><span class="batsu">分けられない</span></td><td><span class="maru">ボタンで分かれる</span></td><td><span class="maru">分かれている</span></td></tr>
+  <tr><td class="k">あとから入った人が<br>過去を見られるか</td><td><span class="sankaku">ノートは見られる</span></td><td><span class="maru">ボタンの先は見られる</span></td><td><span class="maru">掲示板は見られる</span></td></tr>
+  <tr><td class="k">発信できる人</td><td>メンバー全員</td><td><span class="maru">権限を持つ人だけ</span></td><td><span class="maru">設定で選べる</span><br>全員／運営だけ</td></tr>
+  <tr><td class="k">個別の相談を<br>受ける場所</td><td>個人LINE</td><td><span class="maru">1対1チャット</span></td><td>BANDのトーク</td></tr>
+  <tr><td class="k">メンバーが<br>用意するもの</td><td><span class="maru">なし</span></td><td>友だち追加</td><td><span class="batsu">アプリ＋会員登録</span><br>（出欠だけならメール認証でも可）</td></tr>
+  <tr><td class="k">メンバーが<br>見る場所の数</td><td><span class="maru">1つ</span></td><td>2つ</td><td>2つ</td></tr>
+  <tr><td class="k">はじめる手間</td><td><span class="maru">ほぼなし</span></td><td>ボタンの設定</td><td>全員の登録</td></tr>
+  <tr><td class="k">費用</td><td>0円</td><td>0円<br>（配信は月200通まで）</td><td>0円<br>（保存容量に上限あり）</td></tr>
+  <tr><td class="k">やめたくなったら</td><td>使わなくなるだけ</td><td>アカウントを閉じる</td><td>LINEに戻す。<br>BANDの記録は残らない</td></tr>
+</table>
+</div>
+<div class="kome"><strong>③の費用について。</strong>人数の上限はなく、掲示板・カレンダー・出欠・アルバム・トーク・権限設定はすべて無料の範囲です。ただし保存容量に上限があり、超えると古いものから順に削除されます（無料の上限が何GBかは確認できていません）。動画をGoogleドライブに置けば、ここには当たりません。追加したい場合は100GBで年5,000円です。</div>
+
+<h2>運営の仕事を書き出す</h2>
+<p>やり方を選ぶ前に、そもそも誰かがやらないといけない仕事がいくつあるかを並べます。3つのどれを選んでも、仕事の数はほとんど変わりません。<strong>変わるのは1件あたりの手数です。</strong></p>
+<div class="wrap">
+<table>
+  <tr>
+    <th>仕事</th><th>いつ</th>
+    <th class="ha">①LINEだけ</th>
+    <th class="hb">②LINE＋公式</th>
+    <th class="hc">③LINE＋BAND</th>
+  </tr>
+  <tr><td class="k">予定を決める</td><td>そのつど</td><td colspan="3" style="text-align:center">3つとも同じ（人が決めること）</td></tr>
+  <tr><td class="k">予定を登録する</td><td>予定ごと</td><td>イベントを作る</td><td><span class="sankaku">イベント＋ボタン先の<br>ページ更新（2か所）</span></td><td>カレンダーに登録</td></tr>
+  <tr><td class="k">出欠の受け皿を作る</td><td>予定ごと</td><td><span class="maru">イベントに自動で付く</span></td><td><span class="maru">イベント機能</span>を使う。<br>または調整さんを作って<br>ページに貼る</td><td><span class="maru">カレンダーに自動で付く</span></td></tr>
+  <tr><td class="k">締切を伝える・催促する</td><td>予定ごと</td><td>トークに書く</td><td>トークに書く</td><td>掲示板に書く</td></tr>
+  <tr><td class="k">月初のまとめを流す</td><td>月1回</td><td>—</td><td><span class="sankaku">配信する</span><br>（月2〜4通まで）</td><td>—</td></tr>
+  <tr><td class="k">直前の変更を伝える</td><td>そのつど</td><td>トーク＋アナウンス</td><td>トーク</td><td>掲示板</td></tr>
+  <tr><td class="k">決まったことを<br>書きかえる</td><td>そのつど</td><td><span class="sankaku">ノートを編集。沈んで<br>いたら投稿し直す</span></td><td>Googleドキュメントを<br>編集</td><td>掲示板に投稿</td></tr>
+  <tr><td class="k">動画をドライブへ<br>移す・リンクを出す</td><td>練習・出演のあと</td><td>ドライブ＋ノートに<br>リンクを貼る</td><td><span class="maru">ドライブに入れるだけ</span><br>（ボタンは固定）</td><td>ドライブまたは<br>アルバム</td></tr>
+  <tr><td class="k">当日の欠席連絡を<br>受ける</td><td>そのつど</td><td colspan="3" style="text-align:center">3つとも同じ。<strong>当日はグループLINEで受ける</strong>（いちばん早く気づくため）</td></tr>
+  <tr><td class="k">事前の相談を受ける</td><td>そのつど</td><td>個人LINE</td><td><span class="maru">1対1チャット</span></td><td>BANDのトーク</td></tr>
+  <tr><td class="k">入会の情報を<br>名簿に入れる</td><td>入会時</td><td colspan="3" style="text-align:center">3つとも同じ（フォームか紙 → 名簿シート）</td></tr>
+  <tr><td class="k">招待する</td><td>入会時</td><td>グループに招待</td><td>＋友だち追加を頼む</td><td><span class="sankaku">＋アプリ登録を案内する</span></td></tr>
+  <tr><td class="k">会費の期を作る<br>入金をチェックする</td><td>半年に1回</td><td colspan="3" style="text-align:center">3つとも同じ（スプレッドシート）</td></tr>
+  <tr><td class="k">未入金の人に<br>声をかける</td><td>半年に1回</td><td>トークに流す</td><td>配信または1対1</td><td>掲示板またはトーク</td></tr>
+  <tr><td class="k">衣装の貸出・返却を<br>記録する</td><td>そのつど</td><td colspan="3" style="text-align:center">3つとも同じ（スプレッドシート）</td></tr>
+</table>
+</div>
+
+<p><strong>予定1件あたりの手数。</strong>いちばん回数が多いところなので、ここだけ抜き出します。</p>
+<div class="wrap">
+<table>
+  <tr><th></th><th class="ha">①</th><th class="hb">②</th><th class="hc">③</th></tr>
+  <tr><td class="k">予定1件につき</td><td>2手<br><span style="font-size:11.5px;color:#5B6470">イベント作成／トーク投稿</span></td><td>3手<br><span style="font-size:11.5px;color:#5B6470">イベント作成／ページ更新／トーク投稿</span></td><td>2手<br><span style="font-size:11.5px;color:#5B6470">カレンダー登録／グループに一言</span></td></tr>
+  <tr><td class="k">かりに月3件<br>だった場合</td><td>6手</td><td>9手＋月初の配信1手</td><td>6手</td></tr>
+</table>
+</div>
+<div class="kome">月に何件の予定が生まれるかは<strong>数えていません</strong>。上の「月3件」は計算例です。<br>②が多いのは、<strong>メンバーが迷わない代わりに運営が余分に動く</strong>構造だからです。メンバー側の手数は逆で、②はボタンを押すだけ、①は遡って探す場面が残ります。どちらに負担を寄せるかの選択になります。</div>
+
+<h2>必要になると思われる仕事の一覧</h2>
+<p>やり方を選ぶと、次の仕事が発生します。<strong>いま実際に誰がどこまでやっているかは、こちらでは把握していません。</strong>すでに回っているものもあれば、これまで誰もやっていなかったものもあると思います。抜けや重なりを見つける材料として使ってください。</p>
+<div class="wrap">
+<table>
+  <tr><th>仕事</th><th>いつ</th><th>備考</th></tr>
+  <tr><td class="k">予定を「確定」と判断する</td><td>そのつど</td><td>これがないと登録が始まりません</td></tr>
+  <tr><td class="k">予定を登録して流す</td><td>予定ごと</td><td>いちばん回数が多い仕事</td></tr>
+  <tr><td class="k">出欠を見る</td><td>予定ごと</td><td>催促するかどうかは運用しだい</td></tr>
+  <tr><td class="k">月初のまとめを流す</td><td>月1回</td><td>②を選んだ場合に発生</td></tr>
+  <tr><td class="k">決まったことを書きかえる</td><td>そのつど</td><td>衣装・集合場所・提出物など</td></tr>
+  <tr><td class="k">動画をドライブへ移す</td><td>練習・出演のあと</td><td>撮った人に直接上げてもらう形もあり</td></tr>
+  <tr><td class="k">当日の欠席連絡を受ける</td><td>当日</td><td>3つともグループLINEで受ける</td></tr>
+  <tr><td class="k">事前の相談を受ける</td><td>そのつど</td><td>置き場所が3つで違う</td></tr>
+  <tr><td class="k">入会の情報を名簿に入れる</td><td>入会時</td><td>フォームなら転記が不要になる</td></tr>
+  <tr><td class="k">会費の入金をチェックする</td><td>半年に1回</td><td>スプレッドシート</td></tr>
+  <tr><td class="k">衣装の貸出・返却を記録する</td><td>そのつど</td><td>スプレッドシート</td></tr>
+</table>
+</div>
+<div class="kome">この一覧のうち、<strong>いまも誰かがやっていること</strong>と、<strong>これから新しく発生すること</strong>を分けて見ると、増える負担がはっきりします。すでにやっていることが多ければ、置き場所が変わるだけです。</div>
+
+<h2>どれを選んでも、別に用意するもの</h2>
+<p>名簿・会費・衣装の管理機能は、3つのどれにも入っていません。ここは共通で、スプレッドシートを持ちます。</p>
+<ul class="body">
+  <li><strong>入会のとき</strong>　情報の集め方が2通りあります。<strong>Googleフォームに保護者が入力する</strong>（送信するとそのまま表に落ちるので、運営は転記しません）か、<strong>紙の入会申込書から書き写す</strong>か。どちらを選んでも、名簿シートに1行足して番号を振るところまでが1つの作業です</li>
+  <li><strong>名簿</strong>　Googleスプレッドシート。連絡先・緊急連絡先・衣装サイズ。運営だけが開ける範囲にします</li>
+  <li><strong>会費</strong>　同じスプレッドシートに1枚。半年に1回、入金にチェックを付けるだけ。金額は入力しません</li>
+  <li><strong>衣装</strong>　同じスプレッドシートに1枚。貸した・返った・買ったを1行ずつ足していきます</li>
+  <li><strong>動画・写真</strong>　Googleドライブ／フォト。<strong>LINEのトークに上げた動画は一定期間で見られなくなる</strong>ので、残したいものはここに移します（写真はLINEのアルバムに入れれば残ります）</li>
+  <li><strong>コベカツの会費</strong>　スクペイ（変えられません）</li>
+</ul>
+<div class="kome">スクペイは<strong>クラブから送るだけの一方通行</strong>で、テキスト500文字まで、送ったものは消せません。生徒から「休みます」を送ることもできません。だから、どのやり方を選んでも、こちらで受け皿を用意する必要があります。</div>
+
+<h2>判断の材料になりそうなこと</h2>
+<p>3つのどれが合うかは、星蘭の実際の事情で変わります。ここでは、その分かれ目になりそうな点を並べます。<strong>答えを出す必要はありません。</strong>読んだときに「うちはこっちだな」と思うところがあれば、それが選ぶ手がかりになります。</p>
+
+<div class="ask"><b>予定が「確定」になる瞬間が、はっきりしているか</b><span>3つとも、確定した予定を登録するところから始まります。話し合いの途中の日程を登録すると、あとで直すことになります。ここが曖昧なままだと、どのやり方を選んでも最初の一手が出ません。道具より前の話です。</span></div>
+
+<div class="ask"><b>メンバー全員が、新しいアプリを入れて登録できそうか</b><span>数人でも入らない人がいると、その人にだけ別に伝えることになり、二重管理が始まります。ここが③の分かれ目です。ただし③は、アプリを入れていない人でも出欠だけならメール認証で答えられます。</span></div>
+
+<div class="ask"><b>コベカツで入ってくる保護者が、星蘭のLINEグループに入るかどうか</b><span>入らない場合、①ではその人たちに予定も出欠も届きません。②③なら別の入口があります。</span></div>
+
+<div class="ask"><b>決まったことを、種類ごとに分けたいか。1か所でも足りるか</b><span>分けたいなら②か③。1本で足りるなら①で回ります。いま何種類の情報を追いかけているか次第です。</span></div>
+
+<div class="ask"><b>お知らせを出す人を決めたいか。誰でも出せるほうがよいか</b><span>②は権限を持つ人だけが発信します。③は設定で選べます。①は全員が投稿できます。どちらがよいかは、チームの雰囲気によります。</span></div>
+
+<div class="ask"><b>一斉のお知らせを、月にどれくらい出すか</b><span>②の無料プランは、21人なら月9回ほどが上限です。それより多く出したい場合は①か③になります。</span></div>
+
+<div class="ask"><b>動画を、撮った人に直接ドライブへ上げてもらえそうか</b><span>3つのどれを選んでも出てくる話です。LINEに上げたままだと動画は消えます。撮った人に上げてもらうか、受け取って上げ直すか。前者ならフォルダのリンクと手順を渡すことになります。</span></div>
+
+<div class="ask"><b>入会の情報を、フォームで集めるか、紙から書き写すか</b><span>これも3つ共通です。フォームなら転記が要りませんが、規約への同意や署名は取れません。両方使うなら、紙は署名と同意だけに減らすと二重記入を避けられます。コベカツの保険手続きで紙の原本が要るかどうかは未確認です。</span></div>
+
+<h2>どれを選んでも、あとで効いてくること</h2>
+<p>3つのどれを選んでも、次の3点は同じように効いてきます。あとから直すのが大変な部分です。</p>
+<ul class="body">
+  <li><strong>アカウントを誰の名義で作るか。</strong>個人のアカウントで作ると、その人が抜けたときに誰も触れなくなります</li>
+  <li><strong>操作できる人が何人いるか。</strong>仕組みが簡単でも、分かる人が1人だとそこで止まります</li>
+  <li><strong>手順が書き残されているか。</strong>「予定が決まったら何をするか」「入金があったら何をするか」。スプレッドシートの1枚で足ります</li>
+</ul>
+
+<h2>まだ確認できていないこと</h2>
+<p>コベカツとスクペイに関わる4点は、こちらでは調べられませんでした。<strong>どれも、分かると決められることが変わります。</strong></p>
+<div class="wrap">
+<table>
+  <tr><th style="width:40%">確認したいこと</th><th>分かると、どうなるか</th></tr>
+  <tr>
+    <td class="k">スクペイのクラブ運営者用の画面で、支払状況の一覧が見られるか。書き出せるか</td>
+    <td><strong>見られる場合</strong>　その画面を見ながら会費シートにチェックを付けるだけで済みます。<br><strong>見られない場合</strong>　一人ずつ確認するか、通帳と突き合わせることになります。半年に1回とはいえ、人数分の手作業が増えます。</td>
+  </tr>
+  <tr>
+    <td class="k">コベカツの保険手続きに、紙の入会申込書の原本が必要か</td>
+    <td><strong>必要な場合</strong>　紙は残ります。フォームを併用すると同じことを2回書かせることになるので、紙を署名と同意だけに減らす形になります。<br><strong>不要な場合</strong>　Googleフォーム1本にできます。入会時の転記作業がなくなります。</td>
+  </tr>
+  <tr>
+    <td class="k">コベカツの活動報告で、当日の実際の参加人数を出す必要があるか</td>
+    <td><strong>必要な場合</strong>　当日グループに流れた欠席連絡を、誰かが書き写す仕事が増えます。仕事の一覧に1行足すことになります。<br><strong>不要な場合</strong>　グループに流れて終わりでかまいません。</td>
+  </tr>
+  <tr>
+    <td class="k">コベカツ対象の中学生の残り1,500円を、振込で集めるかどうか</td>
+    <td><strong>振込で集める場合</strong>　会費シートに「ポイント分」「振込分」の2列が要り、入金の確認も2回になります。<br><strong>集めない場合</strong>　列が1つ減り、確認も1回で済みます。</td>
+  </tr>
+</table>
+</div>
+<div class="kome">1つめと4つめは<strong>会費シートの形</strong>が、2つめは<strong>入会の集め方</strong>が、3つめは<strong>仕事の数</strong>が変わります。3つのやり方のどれを選ぶかには影響しないので、選ぶのを待つ必要はありません。</div>
+
+</main>
+<footer>KOBE星蘭纏　情報の置き場所　3つのやり方／2026年9月</footer>
+</div>
+</body>
+</html>
